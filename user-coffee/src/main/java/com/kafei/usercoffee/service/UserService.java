@@ -7,8 +7,8 @@ import java.util.List;
 
 /**
  * @author kafei
- * @Title: usercoffeeService
- * @Package com.kafei.usercoffee.service.impl
+ * @Title: UserModulesService
+ * @Package com.kafei.usermodules.service.impl
  * @Description: 用户相关操作业务处理接口层
  * @date 2020/5/27 17:14
  */

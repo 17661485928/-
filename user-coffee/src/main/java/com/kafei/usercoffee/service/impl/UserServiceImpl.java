@@ -11,8 +11,8 @@ import java.util.List;
 
 /**
  * @author kafei
- * @Title: usercoffeeServiceImpl
- * @Package com.kafei.usercoffee.service.impl
+ * @Title: UserModulesServiceImpl
+ * @Package com.kafei.usermodules.service.impl
  * @Description: 用户相关操作业务处理接口实现层
  * @date 2020/5/27 17:17
  */
@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
-    private UserDao usercoffeeDao;
+    private UserDao userDao;
 
     /**
      * 根据用户名查询用户信息
@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User queryUserInformationByUserName(String username){
-       return usercoffeeDao.queryUserInformationByUserName(username);
+       return userDao.queryUserInformationByUserName(username);
     }
     /**
      * 根据用户名查询用户权限信息
@@ -39,6 +39,6 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public List<Permission> queryUserPermissionByUserName(String username){
-       return usercoffeeDao.queryUserPermissionByUserName(username);
+       return userDao.queryUserPermissionByUserName(username);
     }
 }

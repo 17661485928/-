@@ -28,4 +28,4 @@ mybatis:
 # 打印sql
 logging:
   level:
-    com.kafei.usercoffee.dao: debug
+    com.kafei.usermodules.dao: debug

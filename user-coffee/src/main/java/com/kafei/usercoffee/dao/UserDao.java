@@ -2,13 +2,12 @@ package com.kafei.usercoffee.dao;
 
 import com.kafei.usercoffee.model.Permission;
 import com.kafei.usercoffee.model.User;
-
 import java.util.List;
 
 /**
  * @author kafei
- * @Title: usercoffeeDao
- * @Package com.kafei.usercoffee.dao
+ * @Title: UserModulesDao
+ * @Package com.kafei.usermodules.dao
  * @Description: 用户相关操作持久层
  * @date 2020/5/2717:07
  */
