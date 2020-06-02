@@ -32,8 +32,16 @@ public class LoginController {
      */
     @RequestMapping(value = "/toHome")
     public Object toHome(){
-
         return "home";
+    }
+    /**
+     * 跳转首页
+     * @return
+     */
+    @RequestMapping(value = "/index-coffee")
+    public Object toIndex(){
+
+        return "home/indexCoffee";
     }
     @RequestMapping(value = "/logout")
     public Object logout(){
