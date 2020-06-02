@@ -33,6 +33,7 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/user-modules/pom.xml" />
+        <option value="$PROJECT_DIR$/user-coffee/pom.xml" />
       </list>
     </option>
   </component>
