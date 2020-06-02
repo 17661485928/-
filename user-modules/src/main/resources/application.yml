@@ -1,0 +1,31 @@
+#端口设置
+server:
+  port: 8888
+spring:
+  application:
+    #服务名称
+    name: user-modules
+  thymeleaf:
+    prefix: classpath:/templates/
+    cache: false
+  mvc:
+    static-path-pattern: /static/**
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/micro-service?serverTimezone=GMT
+    username: root
+    password: admin
+#mybatis数据库映射文件配置
+#mybatis.config-locations=classpath:mybatis/mybatis-config.xml
+#mybatis.mapper-locations=classpath:mybatis/mapper/*.xml
+mybatis:
+  configuration:
+    #开启驼峰映射
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath:mybatis/mapper/*.xml
+  typeAliasesPackage: com.kafei.usermodules.model
+
+# 打印sql
+logging:
+  level:
+    com.kafei.usermodules.dao: debug

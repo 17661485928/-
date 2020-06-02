@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kafei.usermodules.dao.UserDao">
+
+    <!-- 根据用户名查询用户信息 -->
+    <select id="queryUserInformationByUserName" resultType="com.kafei.usermodules.model.User">
+        SELECT
+            ID,
+	        USERNAME,
+	        REALNAME,
+	        PASSWORD,
+	        CREATEDATE,
+	        LASTLOGINTIME,
+	        ENABLED,
+	        ACCOUNTNONEXPIRED,
+	        ACCOUNTNONLOCKED,
+	        CREDENTIALSNONEXPIRED
+        FROM
+            SYS_USER
+        WHERE 1=1
+            AND  USERNAME = #{username}
+    </select>
+
+    <!-- 根据用户名查询用户权限信息 -->
+    <select id="queryUserPermissionByUserName" resultType="com.kafei.usermodules.model.Permission">
+        SELECT
+            P.ID,
+            P.URL,
+            P.PERMNAME,
+            P.PERMTAG
+        FROM
+            SYS_USER U
+        INNER JOIN SYS_USER_ROLE U_R ON U.ID = U_R.USERID
+        INNER JOIN SYS_ROLE_PERMISSION R_P ON U_R.ROLEID = R_P.ROLEID
+        INNER JOIN SYS_PERMISSION P ON R_P.PERMISSIONID = P.ID
+        WHERE
+            U.USERNAME = #{username}
+    </select>
+
+    <!-- 查询所有去权限 -->
+    <select id="queryAllPermission" resultType="com.kafei.usermodules.model.Permission">
+        SELECT
+            P.ID,
+            P.URL,
+            P.PERMNAME,
+            P.PERMTAG
+        FROM
+            SYS_USER U
+        INNER JOIN SYS_USER_ROLE U_R ON U.ID = U_R.USERID
+        INNER JOIN SYS_ROLE_PERMISSION R_P ON U_R.ROLEID = R_P.ROLEID
+        INNER JOIN SYS_PERMISSION P ON R_P.PERMISSIONID = P.ID
+    </select>
+</mapper>

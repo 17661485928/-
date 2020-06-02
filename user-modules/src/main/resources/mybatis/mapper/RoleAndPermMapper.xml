@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kafei.usermodules.dao.RoleAndPermDao">
+
+    <select id="queryRole" resultType="com.kafei.usermodules.model.Role">
+        SELECT
+            ID,
+            DESCRIPTION,
+            ROLE_NAME,
+            CREATE_TIME,
+            UPDATE_TIME,
+            VALIDITY
+        FROM
+            KF_ROLE
+    </select>
+    <!-- 根据用户id查询所有的角色ID信息 -->
+    <select id="selectUserRoleKey" parameterType="java.lang.Integer" resultType="java.util.Map">
+        SELECT
+            ID,
+            USER_ID,
+            ROLE_ID,
+            CREATE_TIME,
+            UPDATE_TIME
+        FROM
+            KF_USER_ROLE
+        WHERE 1 = 1
+          AND USER_ID=#{id}
+    </select>
+
+    <!-- 根据角色id查询所有的角色信息 -->
+    <select id="selectRoleById" parameterType="java.util.List" resultType="com.kafei.usermodules.model.Role">
+        SELECT
+        ID AS ROLEID,
+        DESCRIPTION,
+        ROLE_NAME,
+        CREATE_TIME,
+        UPDATE_TIME,
+        VALIDITY
+        FROM
+        KF_ROLE
+        WHERE 1 = 1
+        AND ID IN
+        <foreach collection="roleIdList" item="item"
+                 open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+    <!-- 根据角色id查询所有的权限ID信息 -->
+    <select id="selectPermissionIdByRoleId" parameterType="java.util.List" resultType="java.util.Map">
+        SELECT
+        ID,
+        ROLE_ID,
+        PERMISSION_ID,
+        CREATE_TIME,
+        UPDATE_TIME
+        FROM
+        KF_ROLE_PERMISSION
+        WHERE 1 = 1
+        AND ROLE_ID IN
+        <foreach collection="roleIds" item="item"
+                 open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <!-- 根据权限id查询所有的权限信息 -->
+    <select id="selectPermissionById" parameterType="java.util.List" resultType="com.kafei.usermodules.model.Permission">
+        SELECT
+        ID AS PERMISSIONID,
+        DESCRIPTION,
+        PERMISSION_NAME,
+        CREATE_TIME,
+        UPDATE_TIME,
+        VALIDITY
+        FROM
+        KF_PERMISSION
+        WHERE 1 = 1
+        AND ID IN
+        <foreach collection="permissionIdList" item="item"
+                 open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <!-- 根据用户Id查询用户信息 -->
+    <select id="findUserById" resultType="com.kafei.usermodules.model.User">
+        SELECT
+            ID AS USERID,
+            USER_NAME,
+            PASS_WORD,
+            GENDER,
+            USER_EMAIL,
+            MOBILE_PHONE_NO,
+            USER_BIRTHDAY,
+            IN_AREA,
+            HOMETOWN,
+            CREATE_TIME,
+            UPDATE_TIME,
+            VALIDITY
+        FROM
+            KF_USER
+        WHERE 1 = 1
+          AND ID=#{userId}
+    </select>
+</mapper>
