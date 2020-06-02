@@ -1,14 +1,14 @@
 package com.kafei.usercoffee.service;
 
-import com.kafei.usermodules.model.Permission;
-import com.kafei.usermodules.model.User;
+import com.kafei.usercoffee.model.Permission;
+import com.kafei.usercoffee.model.User;
 
 import java.util.List;
 
 /**
  * @author kafei
- * @Title: UserModulesService
- * @Package com.kafei.usermodules.service.impl
+ * @Title: usercoffeeService
+ * @Package com.kafei.usercoffee.service.impl
  * @Description: 用户相关操作业务处理接口层
  * @date 2020/5/27 17:14
  */

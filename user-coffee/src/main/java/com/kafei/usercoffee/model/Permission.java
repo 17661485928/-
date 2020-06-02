@@ -3,7 +3,7 @@ package com.kafei.usercoffee.model;
 /**
  * @author kafei
  * @Title: PermissionModel
- * @Package com.kafei.usermodules.model
+ * @Package com.kafei.usercoffee.model
  * @Description: 权限实体类
  * @date 2020/5/28 11:40
  */

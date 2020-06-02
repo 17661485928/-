@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.kafei.usermodules.dao.RoleAndPermDao">
+<mapper namespace="com.kafei.usercoffee.dao.RoleAndPermDao">
 
-    <select id="queryRole" resultType="com.kafei.usermodules.model.Role">
+    <select id="queryRole" resultType="com.kafei.usercoffee.model.Role">
         SELECT
             ID,
             DESCRIPTION,
@@ -28,7 +28,7 @@
     </select>
 
     <!-- 根据角色id查询所有的角色信息 -->
-    <select id="selectRoleById" parameterType="java.util.List" resultType="com.kafei.usermodules.model.Role">
+    <select id="selectRoleById" parameterType="java.util.List" resultType="com.kafei.usercoffee.model.Role">
         SELECT
         ID AS ROLEID,
         DESCRIPTION,
@@ -64,7 +64,7 @@
     </select>
 
     <!-- 根据权限id查询所有的权限信息 -->
-    <select id="selectPermissionById" parameterType="java.util.List" resultType="com.kafei.usermodules.model.Permission">
+    <select id="selectPermissionById" parameterType="java.util.List" resultType="com.kafei.usercoffee.model.Permission">
         SELECT
         ID AS PERMISSIONID,
         DESCRIPTION,
@@ -83,7 +83,7 @@
     </select>
 
     <!-- 根据用户Id查询用户信息 -->
-    <select id="findUserById" resultType="com.kafei.usermodules.model.User">
+    <select id="findUserById" resultType="com.kafei.usercoffee.model.User">
         SELECT
             ID AS USERID,
             USER_NAME,

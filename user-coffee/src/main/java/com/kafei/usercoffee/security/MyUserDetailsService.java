@@ -1,8 +1,8 @@
 package com.kafei.usercoffee.security;
 
-import com.kafei.usermodules.dao.UserDao;
-import com.kafei.usermodules.model.Permission;
-import com.kafei.usermodules.model.User;
+import com.kafei.usercoffee.dao.UserDao;
+import com.kafei.usercoffee.model.Permission;
+import com.kafei.usercoffee.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

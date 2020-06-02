@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.kafei.usermodules.dao.UserDao">
+<mapper namespace="com.kafei.usercoffee.dao.UserDao">
 
     <!-- 根据用户名查询用户信息 -->
-    <select id="queryUserInformationByUserName" resultType="com.kafei.usermodules.model.User">
+    <select id="queryUserInformationByUserName" resultType="com.kafei.usercoffee.model.User">
         SELECT
             ID,
 	        USERNAME,
@@ -22,7 +22,7 @@
     </select>
 
     <!-- 根据用户名查询用户权限信息 -->
-    <select id="queryUserPermissionByUserName" resultType="com.kafei.usermodules.model.Permission">
+    <select id="queryUserPermissionByUserName" resultType="com.kafei.usercoffee.model.Permission">
         SELECT
             P.ID,
             P.URL,
@@ -38,7 +38,7 @@
     </select>
 
     <!-- 查询所有去权限 -->
-    <select id="queryAllPermission" resultType="com.kafei.usermodules.model.Permission">
+    <select id="queryAllPermission" resultType="com.kafei.usercoffee.model.Permission">
         SELECT
             P.ID,
             P.URL,

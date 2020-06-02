@@ -23,9 +23,9 @@ mybatis:
     #开启驼峰映射
     map-underscore-to-camel-case: true
   mapper-locations: classpath:mybatis/mapper/*.xml
-  typeAliasesPackage: com.kafei.usermodules.model
+  typeAliasesPackage: com.kafei.usercoffee.model
 
 # 打印sql
 logging:
   level:
-    com.kafei.usermodules.dao: debug
+    com.kafei.usercoffee.dao: debug

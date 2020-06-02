@@ -1,8 +1,8 @@
 package com.kafei.usercoffee.config;
 
-import com.kafei.usermodules.dao.UserDao;
-import com.kafei.usermodules.model.Permission;
-import com.kafei.usermodules.util.MD5Util;
+import com.kafei.usercoffee.dao.UserDao;
+import com.kafei.usercoffee.model.Permission;
+import com.kafei.usercoffee.util.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
