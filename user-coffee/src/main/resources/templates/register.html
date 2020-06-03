@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>CoffeeのSugar</title>
+<link rel="stylesheet" rev="stylesheet" media="all" th:href="@{/static/css/register-style.css}"/>
+</head>
+<style>
+    .bg{
+        width:650px;
+        height:945px;
+        position:relative;                                       /*设置相对定位*/
+        margin:0px auto;
+        background:url(/static/images/form_bg.jpg) no-repeat;            /*添加背景图片*/
+        background-size:cover;
+    }
+</style>
+<body>
+<div class="bg">
+    <form th:action="@{/userRegister}" method="POST">
+    <h2>CoffeeのSugar</h2>
+    <p><span>用户登录名：</span><input type="text" name="username" placeholder="myemail@163.com" />（不能修改，只能查看）</p>
+    <p><span>登录密码：</span><input type="password" name="password" placeholder="密码" required autofocus/>（必须填写）</p>
+    <p><span>真实姓名：</span><input type="text" name="real_name"   placeholder="例如：周末" required autofocus/>（必须填写，只能输入汉字）</p>
+    <p><span>真实年龄：</span><input type="number" name="real_lage"  min="10" max="120" required/>（必须填写）</p>
+    <p><span>出生日期：</span><input type="date" name="birthday" value="1990-10-1" required/>（必须填写）</p>
+    <p><span>电子邮箱：</span><input type="email" name="myemail" placeholder="123456@126.com" required multiple/>（必须填写）</p>
+    <!--<p><span>身份证号：</span><input type="text" name="card" required pattern="^\d{8,18}|[0-9x]{8,18}|[0-9X]{8,18}?$"/>（必须填写，能够以数字、<br>字母x结尾的短身份证号）</p>-->
+    <p><span>手机号码：</span><input type="tel" name="telphone" pattern="^\d{11}$" required/>（必须填写）</p>
+    <!--<p><span>个人主页：</span><input type="url" name="myurl" list="urllist" placeholder="http://www.youtiy.com" pattern="^http://([\w-]+\.)+[\w-]+(/[\w-./?%&=]*)?$"/>（请选择网址）
+      <datalist id="urllist">
+      <option>http://www.youtiy.com</option>
+      </datalist>
+    </p>-->
+    <p class="lucky"><span>幸运颜色：</span><input type="color" name="lovecolor" />（请选择你喜欢的颜色）</p>
+    <p class="btn">
+    <input type="submit" value="提交"/>
+    <input type="reset" value="重置"/>
+    </p>
+    </form>
+</div>
+</body>
+</html>

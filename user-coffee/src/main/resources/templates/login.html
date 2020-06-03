@@ -112,13 +112,13 @@
             <form th:action="@{/login}" method="post" class="stu_login_error">
                 <div id="username">
                     <label>用户名：</label>
-                    <input type="text" id="stu_username_hide" name="username" value="输入用户名" nullmsg="用户名不能为空！"
+                    <input type="text" id="stu_username_hide" name="username" placeholder="输入用户名" nullmsg="用户名不能为空！"
                            sucmsg="用户名验证通过！"/>
                     <!--ajaxurl="demo/valid.jsp"-->
                 </div>
                 <div id="password">
                     <label>密&nbsp;&nbsp;&nbsp;码：</label>
-                    <input type="password" id="stu_password_hide" name="password" value="输入密码" nullmsg="密码不能为空！"
+                    <input type="password" id="stu_password_hide" name="password" placeholder="输入密码" nullmsg="密码不能为空！"
                             sucmsg="密码验证通过！"/>
                 </div>
                 <!--<div id="code">

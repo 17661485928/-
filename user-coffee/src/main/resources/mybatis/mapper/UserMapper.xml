@@ -2,6 +2,35 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kafei.usercoffee.dao.UserDao">
 
+    <!-- 用户注册 -->
+    <insert id="userRegister" parameterType="java.util.Map">
+        INSERT INTO SYS_USER (
+                USERNAME,
+                REALNAME,
+                PASSWORD,
+                REALAGE,
+                BIRTHDATE,
+                EMAIL,
+                MOBILEPHONE,
+                LUCKYCOLOR,
+                CREATEDATE,
+                LASTLOGINTIME
+            )
+            VALUES
+                (
+                    #{username,jdbcType=VARCHAR},
+                    #{real_name,jdbcType=VARCHAR},
+                    #{password,jdbcType=VARCHAR},
+                    #{real_lage,jdbcType=INTEGER},
+                    #{birthday},
+                    #{myemail,jdbcType=VARCHAR},
+                    #{telphone,jdbcType=VARCHAR},
+                    #{lovecolor,jdbcType=VARCHAR},
+                    #{createDate},
+                    #{lastlogintime}
+                )
+    </insert>
+
     <!-- 根据用户名查询用户信息 -->
     <select id="queryUserInformationByUserName" resultType="com.kafei.usercoffee.model.User">
         SELECT
@@ -9,6 +38,11 @@
 	        USERNAME,
 	        REALNAME,
 	        PASSWORD,
+	        REALAGE,
+	        BIRTHDATE,
+	        EMAIL,
+	        MOBILEPHONE,
+	        LUCKYCOLOR,
 	        CREATEDATE,
 	        LASTLOGINTIME,
 	        ENABLED,

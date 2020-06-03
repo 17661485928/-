@@ -88,7 +88,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/login")//退出成功后的页面请求
                 .invalidateHttpSession(true)//销毁session
                 .permitAll().and().authorizeRequests()
-                .antMatchers("/login").permitAll()
+                .antMatchers("/login","/register","/").permitAll()
                 //所有的请求都需要登录验证之后才可以访问
                 .anyRequest().authenticated() //其他路径都要拦截
         ;
@@ -96,7 +96,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/static/**");
+        web.ignoring().antMatchers("/static/**","/userRegister");
     }
 
     /*@Bean

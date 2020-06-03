@@ -21,6 +21,11 @@ public class User implements UserDetails {
     private String  username;
     private String  realname;
     private String  password;
+    private Integer realage;
+    private Date birthDate;
+    private String email;
+    private String mobilePhone;
+    private String luckyColor;
     private Date createDate;
     private Date lastLoginTime;
     private boolean enabled;
@@ -52,6 +57,46 @@ public class User implements UserDetails {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Integer getRealage() {
+        return realage;
+    }
+
+    public void setRealage(Integer realage) {
+        this.realage = realage;
+    }
+
+    public Date getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getMobilePhone() {
+        return mobilePhone;
+    }
+
+    public void setMobilePhone(String mobilePhone) {
+        this.mobilePhone = mobilePhone;
+    }
+
+    public String getLuckyColor() {
+        return luckyColor;
+    }
+
+    public void setLuckyColor(String luckyColor) {
+        this.luckyColor = luckyColor;
     }
 
     public Date getCreateDate() {

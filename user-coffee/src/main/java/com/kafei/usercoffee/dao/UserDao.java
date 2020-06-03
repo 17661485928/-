@@ -3,6 +3,7 @@ package com.kafei.usercoffee.dao;
 import com.kafei.usercoffee.model.Permission;
 import com.kafei.usercoffee.model.User;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author kafei
@@ -27,8 +28,14 @@ public interface UserDao {
     List<Permission> queryUserPermissionByUserName(String username);
 
     /**
-     *
+     * 查询所有权限
      * @return
      */
     List<Permission> queryAllPermission();
+
+    /**
+     * 注册
+     * @param params
+     */
+    void userRegister(Map<String, Object> params);
 }

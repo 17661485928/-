@@ -4,10 +4,13 @@ import com.kafei.usercoffee.dao.UserDao;
 import com.kafei.usercoffee.model.Permission;
 import com.kafei.usercoffee.model.User;
 import com.kafei.usercoffee.service.UserService;
+import com.kafei.usercoffee.util.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author kafei
@@ -40,5 +43,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<Permission> queryUserPermissionByUserName(String username){
        return userDao.queryUserPermissionByUserName(username);
+    }
+
+    /**
+     * @Description: 用户注册
+     * @param ${tags}
+     * @return ${return_type}
+     * @throws
+     * @author kafei
+     * @date 2020/6/3 11:19
+     */
+    @Override
+    public void userRegister(Map<String, Object> params) {
+        String password = MD5Util.encode(params.get("password").toString());
+        params.put("password",password);
+        params.put("createDate",new Date());
+        params.put("lastlogintime",new Date());
+        userDao.userRegister(params);
     }
 }
