@@ -20,6 +20,13 @@ import java.io.IOException;
 public class MyAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
-        httpServletResponse.sendRedirect("/index-coffee");
+        String username = httpServletRequest.getParameter("username");
+        String url = "";
+        if("admin".equals(username)){
+            url = "/indexMent";
+        } else {
+            url = "/toHome";
+        }
+        httpServletResponse.sendRedirect(url);
     }
 }

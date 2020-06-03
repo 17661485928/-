@@ -17,9 +17,9 @@
 </style>
 <body>
 <div class="bg">
-    <form th:action="@{/userRegister}" method="POST">
+    <form th:action="@{/LoginController/userRegister}" method="POST" autocomplete="off">
     <h2>CoffeeのSugar</h2>
-    <p><span>用户登录名：</span><input type="text" name="username" placeholder="myemail@163.com" />（不能修改，只能查看）</p>
+    <p><span>用户登录名：</span><input type="text" name="username" placeholder="myemail@163.com" required autofocus/>（不能修改，只能查看）</p>
     <p><span>登录密码：</span><input type="password" name="password" placeholder="密码" required autofocus/>（必须填写）</p>
     <p><span>真实姓名：</span><input type="text" name="real_name"   placeholder="例如：周末" required autofocus/>（必须填写，只能输入汉字）</p>
     <p><span>真实年龄：</span><input type="number" name="real_lage"  min="10" max="120" required/>（必须填写）</p>

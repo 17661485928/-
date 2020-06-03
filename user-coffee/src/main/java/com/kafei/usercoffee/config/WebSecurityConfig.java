@@ -96,7 +96,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/static/**","/userRegister");
+        web.ignoring().antMatchers("/static/**","/LoginController/userRegister");
     }
 
     /*@Bean
