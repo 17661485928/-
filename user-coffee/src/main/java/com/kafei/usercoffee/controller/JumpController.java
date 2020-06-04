@@ -3,6 +3,9 @@ package com.kafei.usercoffee.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
 /**
  * @author kafei
  * @Title:
@@ -52,7 +55,31 @@ public class JumpController {
      */
     @RequestMapping(value = "/indexMent")
     public Object indexMent() {
-        return "management/index";
+        return "management/indexMent";
+    }
+    /**
+     * 跳转管理首页
+     * @return
+     */
+    @RequestMapping(value = "/listMent")
+    public Object listMent() {
+        return "management/list";
+    }
+    /**
+     * 跳转用户信息
+     * @return
+     */
+    @RequestMapping(value = "/userInfo")
+    public Object userInfo() {
+        return "management/userInfo";
+    }
+    /**
+     * 跳转角色信息
+     * @return
+     */
+    @RequestMapping(value = "/roleInfo")
+    public Object roleInfo() {
+        return "management/roleInfo";
     }
     /**
      * 客户端首页

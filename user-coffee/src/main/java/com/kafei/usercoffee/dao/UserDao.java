@@ -1,6 +1,7 @@
 package com.kafei.usercoffee.dao;
 
 import com.kafei.usercoffee.model.Permission;
+import com.kafei.usercoffee.model.Role;
 import com.kafei.usercoffee.model.User;
 import java.util.List;
 import java.util.Map;
@@ -38,4 +39,8 @@ public interface UserDao {
      * @param params
      */
     void userRegister(Map<String, Object> params);
+
+    List<Role> roleInfoList(Map<String,Object> param);
+
+    Integer roleAllCount(Map<String, Object> requestParam);
 }

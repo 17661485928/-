@@ -84,4 +84,14 @@
         INNER JOIN SYS_ROLE_PERMISSION R_P ON U_R.ROLEID = R_P.ROLEID
         INNER JOIN SYS_PERMISSION P ON R_P.PERMISSIONID = P.ID
     </select>
+
+    <select id="roleInfoList" parameterType="java.util.Map" resultType="com.kafei.usercoffee.model.Role">
+        SELECT *
+        FROM
+        SYS_ROLE LIMIT #{statr},#{end}
+    </select>
+    <!-- 查询角色分页总条数 -->
+    <select id="roleAllCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM SYS_ROLE
+    </select>
 </mapper>

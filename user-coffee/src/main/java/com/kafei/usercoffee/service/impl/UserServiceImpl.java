@@ -2,6 +2,7 @@ package com.kafei.usercoffee.service.impl;
 
 import com.kafei.usercoffee.dao.UserDao;
 import com.kafei.usercoffee.model.Permission;
+import com.kafei.usercoffee.model.Role;
 import com.kafei.usercoffee.model.User;
 import com.kafei.usercoffee.service.UserService;
 import com.kafei.usercoffee.util.MD5Util;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -60,5 +62,21 @@ public class UserServiceImpl implements UserService {
         params.put("createDate",new Date());
         params.put("lastlogintime",new Date());
         userDao.userRegister(params);
+    }
+
+    @Override
+    public Map<String,Object> roleInfoList(String page, String limit) {
+        Map<String,Object> requestParam = new HashMap<>();
+        Integer statr = (Integer.valueOf(page)-1)*Integer.valueOf(limit);//开始查询位置
+        requestParam.put("statr",statr);
+        requestParam.put("end",Integer.valueOf(limit));//结束位置
+        List<Role> roleList = userDao.roleInfoList(requestParam);
+        Integer roleCount = userDao.roleAllCount(requestParam);
+        Map<String,Object> responseMap = new HashMap<>();
+        responseMap.put("code",0);
+        responseMap.put("msg","");
+        responseMap.put("count",roleCount);
+        responseMap.put("data",roleList);
+        return responseMap;
     }
 }

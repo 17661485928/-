@@ -1,6 +1,7 @@
 package com.kafei.usercoffee.service;
 
 import com.kafei.usercoffee.model.Permission;
+import com.kafei.usercoffee.model.Role;
 import com.kafei.usercoffee.model.User;
 
 import java.util.List;
@@ -30,4 +31,6 @@ public interface UserService {
     public List<Permission> queryUserPermissionByUserName(String username);
 
     void userRegister(Map<String, Object> params);
+
+    Map<String,Object> roleInfoList(String page, String limit);
 }

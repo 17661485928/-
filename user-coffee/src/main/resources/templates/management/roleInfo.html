@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>咖啡の角色</title>
+    <link rel="stylesheet"  rev="stylesheet" th:href="@{/static/layui/css/layui.css}" media="all">
+</head>
+<script type="text/javascript" th:src="@{/static/layui/layui.js}"></script>
+<body>
+<table id="roleTable" lay-filter="test"></table>
+<script type="text/html" id="roletoolbar">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>
+        <button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>
+    </div>
+</script>
+</body>
+<script type="text/javascript">
+
+    layui.use('table', function () {
+        var table = layui.table;
+
+        //第一个实例
+        table.render({
+            elem: '#roleTable'
+            , height: 532
+            , url: '/LoginController/roleInfoList' //数据接口
+            ,toolbar: '#roletoolbar' //开启头部工具栏，并为其绑定左侧模板
+            , page: true //开启分页
+            ,limit:3   //默认十条数据一页
+            ,limits:[10,20,30,50]  //数据分页条
+            , cols: [
+                [ //表头
+                    {field: 'id', title: 'ID', width: 80, sort: true, fixed: 'left'}
+                    , {field: 'rolename', title: '角色名称', sort: true}
+                    , {field: 'describe', title: '角色描述'}
+                ]
+            ]
+        });
+
+    });
+</script>
+</html>

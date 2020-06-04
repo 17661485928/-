@@ -79,6 +79,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         for (Permission permission : permissionList) {
             authorizeRequests.antMatchers(permission.getUrl()).hasAnyAuthority(permission.getPermTag());
         }
+        http.headers().frameOptions().disable();
         authorizeRequests.and().csrf().disable().formLogin().loginPage("/login")
                 .successHandler(myAuthenticationSuccessHandler).failureHandler(myAuthenticationFailureHandler)
                 .and()

@@ -4,10 +4,11 @@ server:
 spring:
   application:
     #服务名称
-    name: user-modules
+    name: user-coffee
   thymeleaf:
     prefix: classpath:/templates/
     cache: false
+    suffix: .html
   mvc:
     static-path-pattern: /static/**
   datasource:
