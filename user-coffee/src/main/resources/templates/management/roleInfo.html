@@ -3,42 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <title>咖啡の角色</title>
-    <link rel="stylesheet"  rev="stylesheet" th:href="@{/static/layui/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layui/css/layui.css}" media="all">
 </head>
-<script type="text/javascript" th:src="@{/static/layui/layui.js}"></script>
 <body>
-<table id="roleTable" lay-filter="test"></table>
-<script type="text/html" id="roletoolbar">
+<table id="roleTable" class="layui-hide" lay-filter="roleTable"></table>
+<script th:src="@{/static/layui/layui.all.js}"></script>
+<script th:src="@{/static/js/jquery-1.8.2.min.js}"></script>
+<script type="text/html" id="retool">
     <div class="layui-btn-container">
-        <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
-        <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>
-        <button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>
+        <button class="layui-btn layui-btn-sm" lay-even="addRole">添加の角色</button>
+        <button class="layui-btn layui-btn-sm" lay-even="getCheckLength">获取选中数目</button>
+        <button class="layui-btn layui-btn-sm" lay-even="isAll">验证是否全选</button>
     </div>
 </script>
-</body>
-<script type="text/javascript">
-
+<script type="text/html" id="roleBar">
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="addPerm">添加权限</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<script>
     layui.use('table', function () {
         var table = layui.table;
-
         //第一个实例
         table.render({
             elem: '#roleTable'
-            , height: 532
+            , id: 'roleTable'
+            , height: 530
+            //,width:1130
             , url: '/LoginController/roleInfoList' //数据接口
-            ,toolbar: '#roletoolbar' //开启头部工具栏，并为其绑定左侧模板
+            //,toolbar: '#roletoolbar' //开启头部工具栏，并为其绑定左侧模板
             , page: true //开启分页
-            ,limit:3   //默认十条数据一页
-            ,limits:[10,20,30,50]  //数据分页条
+            , toolbar: '#retool' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+            , totalRow: true //开启合计行
+            , limit: 3   //默认十条数据一页
+            , limits: [10, 20, 30, 50]  //数据分页条
             , cols: [
                 [ //表头
-                    {field: 'id', title: 'ID', width: 80, sort: true, fixed: 'left'}
+                    {type: 'checkbox', fixed: 'left'}
+                    , {field: 'id', title: 'ID', width: 80, sort: true, fixed: 'left'}
                     , {field: 'rolename', title: '角色名称', sort: true}
                     , {field: 'describe', title: '角色描述'}
+                    , {fixed: 'right', title: '操作', toolbar: '#roleBar', width: 220}
                 ]
             ]
         });
-
+        table.on('toolbar(roleTable)', function (obj) {
+            alert(obj);
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch (obj.event) {
+                case 'addRole':
+                    layer.msg("这是查询", { icon: 6, anim: 6 });
+                    break;
+                case 'getInsert':
+                    layer.msg("这是新增", { icon: 6, anim: 6 });
+                    break;
+                case 'getUpdate':
+                    layer.msg("这是修改", { icon: 6, anim: 6 });
+                    break;
+                case 'getDelete':
+                    layer.msg("这是删除", { icon: 6, anim: 6 });
+                    break;
+                case 'getRefresh':
+                    layer.msg("这是刷新", { icon: 6, anim: 6 });
+                    //location.reload();
+                    break;
+            }
+        });
+        //监听行工具事件
+        table.on('tool(roleTable)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'del') {
+                layer.confirm('真的删除行么', function (index) {
+                    obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                    layer.close(index);
+                    //向服务端发送删除指令
+                    $.ajax({
+                        url: "/LoginController/delRole",
+                        type: "POST",
+                        data: {"id": data.id},
+                        dataType: "json",
+                        success: function (result) {
+                            if (result.code === 1) {
+                                layer.msg(result.msg);
+                            } else {
+                                layer.msg(result.msg);
+                            }
+                            table.reload('roleTable', {})    //删除之后,刷新表格
+                        }
+                    });
+                });
+            } else if (obj.event === 'edit') {
+                layer.prompt({
+                    formType: 2
+                    , value: data.email
+                }, function (value, index) {
+                    obj.update({
+                        email: value
+                    });
+                    layer.close(index);
+                });
+            }
+        });
     });
 </script>
+</body>
 </html>

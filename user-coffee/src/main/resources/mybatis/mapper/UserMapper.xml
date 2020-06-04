@@ -30,6 +30,9 @@
                     #{lastlogintime}
                 )
     </insert>
+    <delete id="delRole" >
+        DELETE FROM SYS_ROLE WHERE ID=#{id}
+    </delete>
 
     <!-- 根据用户名查询用户信息 -->
     <select id="queryUserInformationByUserName" resultType="com.kafei.usercoffee.model.User">

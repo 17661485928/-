@@ -33,4 +33,6 @@ public interface UserService {
     void userRegister(Map<String, Object> params);
 
     Map<String,Object> roleInfoList(String page, String limit);
+
+    Map<String, Object> delRole(String id);
 }

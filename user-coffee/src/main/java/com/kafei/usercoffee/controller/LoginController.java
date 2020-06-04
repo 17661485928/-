@@ -49,4 +49,11 @@ public class LoginController {
         Map<String,Object> dataMap = userService.roleInfoList(page,limit);
         return JSONObject.toJSONString(dataMap);
     }
+    @RequestMapping(value = "/delRole")
+    @ResponseBody
+    public String delRole(HttpServletRequest request) {
+        String id = request.getParameter("id");
+        Map<String,Object> dataMap = userService.delRole(id);
+        return JSONObject.toJSONString(dataMap);
+    }
 }

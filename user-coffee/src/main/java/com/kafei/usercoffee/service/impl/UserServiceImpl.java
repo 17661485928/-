@@ -79,4 +79,18 @@ public class UserServiceImpl implements UserService {
         responseMap.put("data",roleList);
         return responseMap;
     }
+
+    @Override
+    public Map<String, Object> delRole(String id) {
+        Map<String, Object> responseMap = new HashMap<>();
+        Integer results = userDao.delRole(Integer.valueOf(id));
+        if(results!=1){
+            responseMap.put("code",0);
+            responseMap.put("msg","删除失败！");
+        } else {
+            responseMap.put("code",1);
+            responseMap.put("msg","删除成功！");
+        }
+        return responseMap;
+    }
 }
