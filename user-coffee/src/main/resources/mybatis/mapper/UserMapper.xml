@@ -30,7 +30,19 @@
                     #{lastlogintime}
                 )
     </insert>
-    <delete id="delRole" >
+    <insert id="addRoleInfo" parameterType="java.util.Map">
+        INSERT INTO SYS_ROLE
+            (
+            ROLENAME,
+            `DESCRIBE`
+            )
+            VALUES
+            (
+                #{rolename},
+                #{des}
+            )
+    </insert>
+    <delete id="delRole">
         DELETE FROM SYS_ROLE WHERE ID=#{id}
     </delete>
 

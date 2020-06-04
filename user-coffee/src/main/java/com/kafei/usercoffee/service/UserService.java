@@ -35,4 +35,6 @@ public interface UserService {
     Map<String,Object> roleInfoList(String page, String limit);
 
     Map<String, Object> delRole(String id);
+
+    Map<String, Object> addRoleInfo(String rolename, String des);
 }

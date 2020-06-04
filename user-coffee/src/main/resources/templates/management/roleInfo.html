@@ -11,7 +11,7 @@
 <script th:src="@{/static/js/jquery-1.8.2.min.js}"></script>
 <script type="text/html" id="retool">
     <div class="layui-btn-container">
-        <button class="layui-btn layui-btn-sm" lay-even="addRole">添加の角色</button>
+        <button class="layui-btn layui-btn-sm" lay-even="addRole" id = "addRole">添加の角色</button>
         <button class="layui-btn layui-btn-sm" lay-even="getCheckLength">获取选中数目</button>
         <button class="layui-btn layui-btn-sm" lay-even="isAll">验证是否全选</button>
     </div>
@@ -102,6 +102,17 @@
                     });
                     layer.close(index);
                 });
+            }
+        });
+    });
+    $("#addRole").click(function(){
+        layer.open({
+            type : 2,
+            title : '添加の角色',
+            area : ['420px', '330px' ],
+            fix : false, // �
+            content : '/addRole',
+            end : function() {
             }
         });
     });

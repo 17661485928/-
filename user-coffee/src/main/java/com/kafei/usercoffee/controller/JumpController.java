@@ -82,6 +82,14 @@ public class JumpController {
         return "management/roleInfo";
     }
     /**
+     * 跳转角色信息
+     * @return
+     */
+    @RequestMapping(value = "/addRole")
+    public Object addRole() {
+        return "management/addRole";
+    }
+    /**
      * 客户端首页
      * @return
      */

@@ -56,4 +56,12 @@ public class LoginController {
         Map<String,Object> dataMap = userService.delRole(id);
         return JSONObject.toJSONString(dataMap);
     }
+    @RequestMapping(value = "/addRoleInfo")
+    @ResponseBody
+    public String addRoleInfo(HttpServletRequest request) {
+        String rolename = request.getParameter("rolename");
+        String des = request.getParameter("des");
+        Map<String,Object> dataMap = userService.addRoleInfo(rolename,des);
+        return JSONObject.toJSONString(dataMap);
+    }
 }

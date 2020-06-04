@@ -93,4 +93,21 @@ public class UserServiceImpl implements UserService {
         }
         return responseMap;
     }
+
+    @Override
+    public Map<String, Object> addRoleInfo(String rolename, String des) {
+        Map<String, Object> responseMap = new HashMap<>();
+        Map<String,Object> requestParam = new HashMap<>();
+        requestParam.put("rolename",rolename);
+        requestParam.put("des",des);
+        Integer results = userDao.addRoleInfo(requestParam);
+        if(results==1){
+            responseMap.put("code",200);
+            responseMap.put("msg","添加成功！");
+        } else {
+            responseMap.put("code",201);
+            responseMap.put("msg","添加失败！");
+        }
+        return responseMap;
+    }
 }

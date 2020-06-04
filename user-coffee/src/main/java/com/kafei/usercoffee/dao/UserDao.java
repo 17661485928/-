@@ -45,4 +45,6 @@ public interface UserDao {
     Integer roleAllCount(Map<String, Object> requestParam);
 
     Integer delRole(Integer valueOf);
+
+    Integer addRoleInfo(Map<String, Object> requestParam);
 }
