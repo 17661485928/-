@@ -75,7 +75,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry authorizeRequests = http.authorizeRequests();
         //1.读取所有权限
         List<Permission> permissionList = userDao.queryAllPermission();
-        System.out.println("Permission:" + permissionList.toString());
         for (Permission permission : permissionList) {
             authorizeRequests.antMatchers(permission.getUrl()).hasAnyAuthority(permission.getPermTag());
         }
