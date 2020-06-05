@@ -73,4 +73,70 @@ public class LoginController {
         Map<String,Object> dataMap = userService.editRoleInfo(id,rolename,des);
         return JSONObject.toJSONString(dataMap);
     }
+    @RequestMapping(value = "/permInfoList")
+    @ResponseBody
+    public String permInfoList(HttpServletRequest request) {
+        String page = request.getParameter("page");//当前页码
+        String limit = request.getParameter("limit");//每页中数据的条数
+        Map<String,Object> dataMap = userService.permInfoList(page,limit);
+        return JSONObject.toJSONString(dataMap);
+    }
+    @RequestMapping(value = "/userInfoList")
+    @ResponseBody
+    public String userInfoList(HttpServletRequest request) {
+        String page = request.getParameter("page");//当前页码
+        String limit = request.getParameter("limit");//每页中数据的条数
+        Map<String,Object> dataMap = userService.userInfoList(page,limit);
+        return JSONObject.toJSONString(dataMap);
+    }
+    @RequestMapping(value = "/addUserInfo")
+    @ResponseBody
+    public String addUserInfo(HttpServletRequest request) {
+        Map<String,Object> params = new HashMap<>();
+        params.put("username",request.getParameter("username"));
+        params.put("password",request.getParameter("password"));
+        params.put("real_name",request.getParameter("real_name"));
+        params.put("real_lage",request.getParameter("real_lage"));
+        params.put("birthday",request.getParameter("birthday"));
+        params.put("myemail",request.getParameter("myemail"));
+        params.put("telphone",request.getParameter("telphone"));
+        params.put("lovecolor",request.getParameter("lovecolor"));
+        Map<String,Object> dataMap = userService.addUserInfo(params);
+        return JSONObject.toJSONString(dataMap);
+    }
+    @RequestMapping(value = "/addPermInfo")
+    @ResponseBody
+    public String addPermInfo(HttpServletRequest request) {
+        String url = request.getParameter("url");
+        String permName = request.getParameter("permName");
+        String permTag = request.getParameter("permTag");
+        Map<String,Object> dataMap = userService.addPermInfo(url,permName,permTag);
+        return JSONObject.toJSONString(dataMap);
+    }
+    @RequestMapping(value = "/delPerm")
+    @ResponseBody
+    public String delPerm(HttpServletRequest request) {
+        String id = request.getParameter("id");
+        Map<String,Object> dataMap = userService.delPerm(id);
+        return JSONObject.toJSONString(dataMap);
+    }
+
+    @RequestMapping(value = "/editPermInfo")
+    @ResponseBody
+    public String editPermInfo(HttpServletRequest request) {
+        String id = request.getParameter("id");
+        String url = request.getParameter("url");
+        String permName = request.getParameter("permName");
+        String permTag = request.getParameter("permTag");
+        Map<String,Object> dataMap = userService.editPermInfo(id,url,permName,permTag);
+        return JSONObject.toJSONString(dataMap);
+    }
+    @RequestMapping(value = "/roleAuthorization")
+    @ResponseBody
+    public String roleAuthorization(HttpServletRequest request) {
+        String id = request.getParameter("id");
+        String roleId = request.getParameter("roleId");
+        Map<String,Object> dataMap = userService.roleAuthorization(id,roleId);
+        return JSONObject.toJSONString(dataMap);
+    }
 }

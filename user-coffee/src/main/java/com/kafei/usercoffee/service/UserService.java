@@ -39,4 +39,18 @@ public interface UserService {
     Map<String, Object> addRoleInfo(String rolename, String des);
 
     Map<String, Object> editRoleInfo(String id, String rolename, String des);
+
+    Map<String, Object> permInfoList(String page, String limit);
+
+    Map<String, Object> userInfoList(String page, String limit);
+
+    Map<String, Object> addUserInfo(Map<String, Object> params);
+
+    Map<String, Object> addPermInfo(String url, String permName, String permTag);
+
+    Map<String, Object> delPerm(String id);
+
+    Map<String, Object> editPermInfo(String id, String url, String permName, String permTag);
+
+    Map<String, Object> roleAuthorization(String id, String roleId);
 }

@@ -49,7 +49,6 @@ public class UserServiceImpl implements UserService {
 
     /**
      * @Description: 用户注册
-     * @param ${tags}
      * @return ${return_type}
      * @throws
      * @author kafei
@@ -125,6 +124,124 @@ public class UserServiceImpl implements UserService {
         } else {
             responseMap.put("code",201);
             responseMap.put("msg","修改失败！");
+        }
+        return responseMap;
+    }
+
+    @Override
+    public Map<String, Object> permInfoList(String page, String limit) {
+        Map<String,Object> requestParam = new HashMap<>();
+        Integer statr = (Integer.valueOf(page)-1)*Integer.valueOf(limit);//开始查询位置
+        requestParam.put("statr",statr);
+        requestParam.put("end",Integer.valueOf(limit));//结束位置
+        List<Permission> permInfoList = userDao.permInfoList(requestParam);
+        Integer permCount = userDao.permAllCount(requestParam);
+        Map<String,Object> responseMap = new HashMap<>();
+        responseMap.put("code",0);
+        responseMap.put("msg","");
+        responseMap.put("count",permCount);
+        responseMap.put("data",permInfoList);
+        return responseMap;
+    }
+
+    @Override
+    public Map<String, Object> userInfoList(String page, String limit) {
+        Map<String,Object> requestParam = new HashMap<>();
+        Integer statr = (Integer.valueOf(page)-1)*Integer.valueOf(limit);//开始查询位置
+        requestParam.put("statr",statr);
+        requestParam.put("end",Integer.valueOf(limit));//结束位置
+        List<User> userInfoList = userDao.userInfoList(requestParam);
+        Integer userCount = userDao.userAllCount(requestParam);
+        Map<String,Object> responseMap = new HashMap<>();
+        responseMap.put("code",0);
+        responseMap.put("msg","");
+        responseMap.put("count",userCount);
+        responseMap.put("data",userInfoList);
+        return responseMap;
+    }
+
+    @Override
+    public Map<String, Object> addUserInfo(Map<String, Object> params) {
+        Map<String, Object> responseMap = new HashMap<>();
+        String password = MD5Util.encode(params.get("password").toString());
+        params.put("password",password);
+        params.put("createDate",new Date());
+        params.put("lastlogintime",new Date());
+        Integer results = userDao.userRegister(params);
+        if(results==1){
+            responseMap.put("code",200);
+            responseMap.put("msg","添加成功！");
+        } else {
+            responseMap.put("code",201);
+            responseMap.put("msg","添加失败！");
+        }
+        return responseMap;
+    }
+
+    @Override
+    public Map<String, Object> addPermInfo(String url, String permName, String permTag) {
+        Map<String, Object> responseMap = new HashMap<>();
+        Map<String,Object> requestParam = new HashMap<>();
+        requestParam.put("url",url);
+        requestParam.put("permName",permName);
+        requestParam.put("permTag",permTag);
+        Integer results = userDao.addPermInfo(requestParam);
+        if(results==1){
+            responseMap.put("code",200);
+            responseMap.put("msg","添加权限成功！");
+        } else {
+            responseMap.put("code",201);
+            responseMap.put("msg","添加权限失败！");
+        }
+        return responseMap;
+    }
+
+    @Override
+    public Map<String, Object> delPerm(String id) {
+        Map<String, Object> responseMap = new HashMap<>();
+        Integer results = userDao.delPerm(Integer.valueOf(id));
+        if(results!=1){
+            responseMap.put("code",201);
+            responseMap.put("msg","删除权限失败！");
+        } else {
+            responseMap.put("code",200);
+            responseMap.put("msg","删除权限成功！");
+        }
+        return responseMap;
+    }
+
+    @Override
+    public Map<String, Object> editPermInfo(String id, String url, String permName, String permTag) {
+        Map<String, Object> responseMap = new HashMap<>();
+        Map<String,Object> requestParam = new HashMap<>();
+        requestParam.put("id",id);
+        requestParam.put("url",url);
+        requestParam.put("permName",permName);
+        requestParam.put("permTag",permTag);
+        Integer results = userDao.editPermInfo(requestParam);
+        if(results==1){
+            responseMap.put("code",200);
+            responseMap.put("msg","修改权限成功！");
+        } else {
+            responseMap.put("code",201);
+            responseMap.put("msg","修改权限失败！");
+        }
+        return responseMap;
+    }
+
+    @Override
+    public Map<String, Object> roleAuthorization(String id, String roleId) {
+        Map<String, Object> responseMap = new HashMap<>();
+        Map<String,Object> requestParam = new HashMap<>();
+        requestParam.put("id",id);
+        requestParam.put("roleId",roleId);
+        Integer results = userDao.roleAuthorization(requestParam);
+        if(results==1){
+            responseMap.put("code",200);
+            responseMap.put("msg","授权成功！");
+        } else {
+            responseMap.put("code",201);
+            responseMap.put("msg","授权失败！");
         }
         return responseMap;
     }

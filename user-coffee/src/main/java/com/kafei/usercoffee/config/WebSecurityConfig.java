@@ -82,6 +82,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         authorizeRequests.and().csrf().disable().formLogin().loginPage("/login")
                 .successHandler(myAuthenticationSuccessHandler).failureHandler(myAuthenticationFailureHandler)
                 .and()
+                .rememberMe()
+                .and()
                 .logout()//退出登录
                 .logoutUrl("/logout")
                 .deleteCookies()//消除cookies

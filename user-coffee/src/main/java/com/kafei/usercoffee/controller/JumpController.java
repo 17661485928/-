@@ -1,8 +1,10 @@
 package com.kafei.usercoffee.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
@@ -34,6 +36,19 @@ public class JumpController {
     @RequestMapping(value = "/register")
     public Object register() {
         return "register";
+    }
+    /**
+     * 跳转注册
+     *
+     * @return
+     */
+    @RequestMapping(value = "/addUser")
+    public Object addUser() {
+        return "management/addUser";
+    }
+    @RequestMapping(value = "/addPerm")
+    public Object addPerm() {
+        return "management/addPerm";
     }
 
     @RequestMapping(value = "/we/toTest")
@@ -90,6 +105,14 @@ public class JumpController {
         return "management/addRole";
     }
     /**
+     * 跳转角色信息
+     * @return
+     */
+    @RequestMapping(value = "/permInfo")
+    public Object permInfo() {
+        return "management/permInfo";
+    }
+    /**
      * 客户端首页
      * @return
      */
@@ -97,6 +120,12 @@ public class JumpController {
     public Object toIndex() {
 
         return "home/indexCoffee";
+    }
+    @RequestMapping(value = "/roleAuthorization")
+    public Object roleAuthorization(Model model, HttpServletRequest request) {
+        String roleId = request.getParameter("roleId");
+        model.addAttribute("roleId", roleId);
+        return "management/roleAuthorization";
     }
 
     /**

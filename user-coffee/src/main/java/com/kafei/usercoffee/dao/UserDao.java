@@ -37,8 +37,9 @@ public interface UserDao {
     /**
      * 注册
      * @param params
+     * @return
      */
-    void userRegister(Map<String, Object> params);
+    Integer userRegister(Map<String, Object> params);
 
     List<Role> roleInfoList(Map<String,Object> param);
 
@@ -49,4 +50,20 @@ public interface UserDao {
     Integer addRoleInfo(Map<String, Object> requestParam);
 
     Integer editRoleInfo(Map<String, Object> requestParam);
+
+    List<Permission> permInfoList(Map<String, Object> requestParam);
+
+    Integer permAllCount(Map<String, Object> requestParam);
+
+    List<User> userInfoList(Map<String, Object> requestParam);
+
+    Integer userAllCount(Map<String, Object> requestParam);
+
+    Integer addPermInfo(Map<String, Object> requestParam);
+
+    Integer delPerm(Integer valueOf);
+
+    Integer editPermInfo(Map<String, Object> requestParam);
+
+    Integer roleAuthorization(Map<String, Object> requestParam);
 }

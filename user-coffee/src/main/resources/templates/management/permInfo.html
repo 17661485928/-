@@ -2,37 +2,43 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>咖啡の角色</title>
+    <title>咖啡の权限</title>
     <link rel="stylesheet" th:href="@{/static/layui/css/layui.css}" media="all">
 </head>
 <body>
-<table id="roleTable" class="layui-hide" lay-filter="roleTable"></table>
-<form class="layui-form layui-from-pane" id="editForm" hidden="hidden" method="post">
+<table id="permTable" class="layui-hide" lay-filter="permTable"></table>
+<form class="layui-form layui-from-pane" id="editPermForm" hidden="hidden" method="post">
     <input type="text" name="id" id="id" autocomplete="off" style="display: none" class="layui-input">
     <div class="layui-form-item">
-        <label class="layui-form-label">角色名称：</label>
+        <label class="layui-form-label">请求URL：</label>
         <div class="layui-input-block">
-            <input type="text" name="rename" id="rename" lay-verify="required" autocomplete="off" placeholder="请输入角色名称"
+            <input type="text" name="url" id="url" lay-verify="required" autocomplete="off" placeholder="请求URL"
                    class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">角色描述：</label>
+        <label class="layui-form-label">权限名称：</label>
         <div class="layui-input-block">
-            <input type="text" name="des" id="des" autocomplete="off" placeholder="请输入角色描述" class="layui-input">
+            <input type="text" name="permName" id="permName" autocomplete="off" placeholder="权限名称" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">权限标识符：</label>
+        <div class="layui-input-block">
+            <input type="text" name="permTag" id="permTag" autocomplete="off" placeholder="权限标识符" class="layui-input">
         </div>
     </div>
 </form>
 <script th:src="@{/static/layui/layui.all.js}"></script>
-<script type="text/html" id="retool">
+<script type="text/html" id="permtool">
     <div class="layui-btn-container">
-        <button class="layui-btn layui-btn-sm" lay-even="addRole" id="addRole">添加の角色</button>
-        <button class="layui-btn layui-btn-sm" lay-even="roleAuthorization" id="roleAuthorization">角色の授权</button>
+        <button class="layui-btn layui-btn-sm" lay-even="addPerm" id="addPerm">添加の权限</button>
+        <button class="layui-btn layui-btn-sm" lay-even="getCheckLength">获取选中数目</button>
         <button class="layui-btn layui-btn-sm" lay-even="isAll">验证是否全选</button>
     </div>
 </script>
-<script type="text/html" id="roleBar">
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="roleAuthor">角色の授权</a>
+<script type="text/html" id="permBar">
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="addPerm">添加权限</a>
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
@@ -47,16 +53,16 @@
             table = layui.table;
         //第一个实例
         table.render({
-            elem: '#roleTable'
-            , id: 'roleTable'
+            elem: '#permTable'
+            , id: 'permTable'
             , height: 530
             //,width:1130
-            , url: '/LoginController/roleInfoList' //数据接口
+            , url: '/LoginController/permInfoList' //数据接口
             //,toolbar: '#roletoolbar' //开启头部工具栏，并为其绑定左侧模板
             , page: true //开启分页
-            , toolbar: '#retool' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+            , toolbar: '#permtool' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
             , totalRow: true //开启合计行
-            , limit: 3   //默认十条数据一页
+            , limit: 10   //默认十条数据一页
             , limits: [10, 20, 30, 50]  //数据分页条
             //templet:'#zizeng'
             , cols: [
@@ -64,36 +70,16 @@
                     {type: 'checkbox', fixed: 'left'}
                     , {field: 'zizeng', type: 'numbers', title: '序号', width: 80, fixed: 'left'}
                     , {field: 'id', title: 'ID', hide:true,width: 80, sort: true, fixed: 'left'}
-                    , {field: 'rolename', title: '角色名称', sort: true}
-                    , {field: 'describe', title: '角色描述'}
-                    , {fixed: 'right', title: '操作', toolbar: '#roleBar', width: 220}
+                    , {field: 'url', title: '请求URL'}
+                    , {field: 'permName', title: '权限名称'}
+                    , {field: 'permTag', title: '权限标识符'}
+                    , {fixed: 'right', title: '操作', toolbar: '#permBar', width: 220}
                 ]
             ]
         });
-        table.on('toolbar(roleTable)', function (obj) {
-            alert(obj);
-            var checkStatus = table.checkStatus(obj.config.id);
-            switch (obj.event) {
-                case 'addRole':
-                    layer.msg("这是查询", {icon: 6, anim: 6});
-                    break;
-                case 'getInsert':
-                    layer.msg("这是新增", {icon: 6, anim: 6});
-                    break;
-                case 'getUpdate':
-                    layer.msg("这是修改", {icon: 6, anim: 6});
-                    break;
-                case 'getDelete':
-                    layer.msg("这是删除", {icon: 6, anim: 6});
-                    break;
-                case 'getRefresh':
-                    layer.msg("这是刷新", {icon: 6, anim: 6});
-                    //location.reload();
-                    break;
-            }
-        });
+
         //监听行工具事件
-        table.on('tool(roleTable)', function (obj) {
+        table.on('tool(permTable)', function (obj) {
             var data = obj.data;
             if (obj.event === 'del') {
                 layer.confirm('真的删除行么', function (index) {
@@ -101,46 +87,47 @@
                     layer.close(index);
                     //向服务端发送删除指令
                     $.ajax({
-                        url: "/LoginController/delRole",
+                        url: "/LoginController/delPerm",
                         type: "POST",
                         data: {"id": data.id},
                         dataType: "json",
                         success: function (result) {
-                            if (result.code === 1) {
+                            if (result.code === 200) {
                                 layer.msg(result.msg);
                             } else {
                                 layer.msg(result.msg);
                             }
-                            table.reload('roleTable', {})    //删除之后,刷新表格
+                            table.reload('permTable', {})    //删除之后,刷新表格
                         }
                     });
                 });
             } else if (obj.event === 'edit') {
                 layer.open({
-                    title: '编辑の角色',
+                    title: '编辑の权限',
                     type: 1,
                     area: ['420px', '330px'],
                     btn: ['确定', '取消'],
                     maxmin: true,
                     shadeClose: true,
-                    content: $('#editForm'),
+                    content: $('#editPermForm'),
                     shade: 0 // 不显示遮罩
                     , success: function (layero, index) {
                         $('#id').val(data.id);
-                        $('#rename').val(data.rolename);
-                        $('#des').val(data.describe);
+                        $('#url').val(data.url);
+                        $('#permName').val(data.permName);
+                        $('#permTag').val(data.permTag);
                     }, btn1: function (index, layero) {
                         $.ajax({
-                            url: '/LoginController/editRoleInfo',
+                            url: '/LoginController/editPermInfo',
                             type: 'POST',
                             dataType: 'json',
-                            data: {id: $('#id').val(), rolename: $('#rename').val(), des: $('#des').val()},
+                            data: {id: $('#id').val(), url: $('#url').val(), permName: $('#permName').val(),permTag:$('#permTag').val()},
                             success: function (msg) {
                                 var code = msg.code;
                                 if (code === 200) {
                                     layer.msg(msg.msg, {icon: 6});
                                     layer.closeAll();
-                                    table.reload('roleTable',{});//弹出层结束后，刷新主页面
+                                    table.reload('permTable',{});//弹出层结束后，刷新主页面
                                 } else {
                                     layer.msg(msg.msg, {icon: 5});
                                 }
@@ -148,37 +135,15 @@
                         });
                     }
                 });
-            } else if (obj.event === 'roleAuthor') {
-                var index = layer.open({
-                    title: '角色の授权',
-                    type: 2,
-                    area: ['420px', '330px'],
-                    maxmin: true,
-                    shadeClose: true,
-                    content: '/roleAuthorization?roleId='+data.id,
-                    shade: 0 // 不显示遮罩
-                });
-                layer.full(index);
             }
         });
-        $("#addRole").click(function () {
+        $("#addPerm").click(function () {
             layer.open({
                 type: 2,
-                title: '添加の角色',
+                title: '添加の权限',
                 area: ['420px', '330px'],
                 fix: false, // �
-                content: '/addRole',
-                end: function () {
-                }
-            });
-        });
-        $("#roleAuthorization").click(function () {
-            layer.open({
-                type: 2,
-                title: '角色の授权',
-                area: ['420px', '330px'],
-                fix: false, // �
-                content: '/addRole',
+                content: '/addPerm',
                 end: function () {
                 }
             });

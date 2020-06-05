@@ -42,11 +42,29 @@
                 #{des}
             )
     </insert>
+    <insert id="addPermInfo" parameterType="java.util.Map">
+        INSERT INTO `sys_permission` (`url`, `permName`, `permTag`)
+            VALUES
+                (
+                    #{url},
+                    #{permName},
+                    #{permTag}
+                )
+    </insert>
+    <insert id="roleAuthorization" parameterType="java.util.Map">
+        INSERT INTO `sys_role_permission` (`roleId`, `permissionId`) VALUES (#{roleId}, #{id});
+    </insert>
     <update id="editRoleInfo" parameterType="java.util.Map">
         UPDATE SYS_ROLE SET rolename=#{rolename}, `describe`=#{des} WHERE ID=#{id}
     </update>
+    <update id="editPermInfo" parameterType="java.util.Map">
+        UPDATE `sys_permission` SET url=#{url},permName=#{permName},permTag=#{permTag} WHERE ID=#{id}
+    </update>
     <delete id="delRole">
         DELETE FROM SYS_ROLE WHERE ID=#{id}
+    </delete>
+    <delete id="delPerm">
+        DELETE FROM `sys_permission` WHERE ID=#{id}
     </delete>
 
     <!-- 根据用户名查询用户信息 -->
@@ -96,11 +114,7 @@
             P.URL,
             P.PERMNAME,
             P.PERMTAG
-        FROM
-            SYS_USER U
-        INNER JOIN SYS_USER_ROLE U_R ON U.ID = U_R.USERID
-        INNER JOIN SYS_ROLE_PERMISSION R_P ON U_R.ROLEID = R_P.ROLEID
-        INNER JOIN SYS_PERMISSION P ON R_P.PERMISSIONID = P.ID
+        FROM SYS_PERMISSION P
     </select>
 
     <select id="roleInfoList" parameterType="java.util.Map" resultType="com.kafei.usercoffee.model.Role">
@@ -111,5 +125,24 @@
     <!-- 查询角色分页总条数 -->
     <select id="roleAllCount" parameterType="java.util.Map" resultType="java.lang.Integer">
         SELECT COUNT(1) FROM SYS_ROLE
+    </select>
+    <!--权限的分页查询 -->
+    <select id="permInfoList" resultType="com.kafei.usercoffee.model.Permission">
+        SELECT * FROM
+        SYS_PERMISSION LIMIT #{statr},#{end}
+    </select>
+    <!-- 查询权限分页总条数 -->
+    <select id="permAllCount" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM SYS_PERMISSION
+    </select>
+    <!--权用户的分页查询 -->
+    <select id="userInfoList" resultType="com.kafei.usercoffee.model.User">
+        SELECT * FROM
+        SYS_USER LIMIT #{statr},#{end}
+    </select>
+
+    <!--查询用户分页总条数-->
+    <select id="userAllCount" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM SYS_USER
     </select>
 </mapper>

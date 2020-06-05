@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>添加の权限</title>
+    <link rel="stylesheet" th:href="@{/static/layui/css/layui.css}" media="all">
+    <style>
+        .layui-form-label{
+            width: 100px;
+        }
+        .layui-input-block {
+            margin-left: 130px;
+            min-height: 36px
+        }
+    </style>
+</head>
+<script th:src="@{/static/layui/layui.all.js}"></script>
+<body>
+<form class="layui-form layui-from-pane" action="" style="margin-top:20px" method="post">
+    <input type="text" name="id" id="id"  autocomplete="off" style="display: none" class="layui-input">
+    <div class="layui-form-item">
+        <label class="layui-form-label">请求URL：</label>
+        <div class="layui-input-block">
+            <input type="text" name="url" id="url" lay-verify="required" autocomplete="off" placeholder="请求URL" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">权限名称：</label>
+        <div class="layui-input-block">
+            <input type="text" name="permName" id="permName" autocomplete="off" placeholder="权限名称" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">权限标识符：</label>
+        <div class="layui-input-block">
+            <input type="text" name="permTag" id="permTag" autocomplete="off" placeholder="权限标识符" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item" style="margin-top:40px">
+        <div class="layui-input-block">
+            <button class="layui-btn  layui-btn-submit " lay-submit="" lay-filter="addPerm">提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+<script>
+    layui.use(['form','layer','jquery'], function(){
+        var form = layui.form
+            ,layer = layui.layer
+            ,$=layui.jquery;
+        //监听提交
+        form.on('submit(addPerm)', function(data){
+            $.ajax({
+                url:'/LoginController/addPermInfo',
+                type:'POST',
+                dataType:'json',
+                data:{url:data.field.url,permName:data.field.permName,permTag:data.field.permTag},
+                success:function (msg) {
+                    var code=msg.code;
+                    if(code===200){
+                        layer.closeAll('loading');
+                        layer.load(2);
+                        layer.msg(msg.msg, {icon: 6});
+                        setTimeout(function(){
+                            window.parent.location.reload();//修改成功后刷新父界面
+                        }, 1000);
+                        //加载层-风格
+                    }else{
+                        layer.msg(msg.msg, {icon: 5});
+                    }
+                }
+            });
+            return false;
+        });
+    });
+</script>
+</body>
+</html>
