@@ -15,19 +15,19 @@
     </style>
 </head>
 <script th:src="@{/static/layui/layui.all.js}"></script>
-<script th:src="@{/static/js/jquery-1.8.2.min.js}"></script>
 <body>
 <form class="layui-form layui-from-pane" action="" style="margin-top:20px" method="post">
+    <input type="text" name="id" id="id"  autocomplete="off" style="display: none" class="layui-input">
     <div class="layui-form-item">
         <label class="layui-form-label">角色名称：</label>
         <div class="layui-input-block">
-            <input type="text" name="rename"  lay-verify="required" autocomplete="off" placeholder="请输入角色名称" class="layui-input">
+            <input type="text" name="rename" id="rename" lay-verify="required" autocomplete="off" placeholder="请输入角色名称" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">角色描述：</label>
         <div class="layui-input-block">
-            <input type="text" name="des"  autocomplete="off" placeholder="请输入角色描述" class="layui-input">
+            <input type="text" name="des" id="des" autocomplete="off" placeholder="请输入角色描述" class="layui-input">
         </div>
     </div>
 
@@ -42,8 +42,7 @@
     layui.use(['form','layer','jquery'], function(){
         var form = layui.form
             ,layer = layui.layer
-            ,$=layui.jquery,
-            table= layui.table;
+            ,$=layui.jquery;
         //监听提交
         form.on('submit(demo1)', function(data){
             $.ajax({
@@ -56,13 +55,13 @@
                     if(code===200){
                         layer.closeAll('loading');
                         layer.load(2);
-                        layer.msg("添加成功", {icon: 6});
+                        layer.msg(msg.msg, {icon: 6});
                         setTimeout(function(){
                             window.parent.location.reload();//修改成功后刷新父界面
                         }, 1000);
                         //加载层-风格
                     }else{
-                        layer.msg("角色添加失败！", {icon: 5});
+                        layer.msg(msg.msg, {icon: 5});
                     }
                 }
             });

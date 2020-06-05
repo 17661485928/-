@@ -47,4 +47,6 @@ public interface UserDao {
     Integer delRole(Integer valueOf);
 
     Integer addRoleInfo(Map<String, Object> requestParam);
+
+    Integer editRoleInfo(Map<String, Object> requestParam);
 }

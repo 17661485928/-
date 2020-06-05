@@ -7,11 +7,26 @@
 </head>
 <body>
 <table id="roleTable" class="layui-hide" lay-filter="roleTable"></table>
+<form class="layui-form layui-from-pane" id="editForm" hidden="hidden" method="post">
+    <input type="text" name="id" id="id" autocomplete="off" style="display: none" class="layui-input">
+    <div class="layui-form-item">
+        <label class="layui-form-label">角色名称：</label>
+        <div class="layui-input-block">
+            <input type="text" name="rename" id="rename" lay-verify="required" autocomplete="off" placeholder="请输入角色名称"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">角色描述：</label>
+        <div class="layui-input-block">
+            <input type="text" name="des" id="des" autocomplete="off" placeholder="请输入角色描述" class="layui-input">
+        </div>
+    </div>
+</form>
 <script th:src="@{/static/layui/layui.all.js}"></script>
-<script th:src="@{/static/js/jquery-1.8.2.min.js}"></script>
 <script type="text/html" id="retool">
     <div class="layui-btn-container">
-        <button class="layui-btn layui-btn-sm" lay-even="addRole" id = "addRole">添加の角色</button>
+        <button class="layui-btn layui-btn-sm" lay-even="addRole" id="addRole">添加の角色</button>
         <button class="layui-btn layui-btn-sm" lay-even="getCheckLength">获取选中数目</button>
         <button class="layui-btn layui-btn-sm" lay-even="isAll">验证是否全选</button>
     </div>
@@ -21,9 +36,15 @@
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
+<script type="text/html" id="zizeng">
+    {{d.LAY_TABLE_INDEX+1}}
+</script>
 <script>
-    layui.use('table', function () {
-        var table = layui.table;
+    layui.use(['form', 'layer', 'table', 'jquery'], function () {
+        var form = layui.form
+            , layer = layui.layer
+            , $ = layui.jquery,
+            table = layui.table;
         //第一个实例
         table.render({
             elem: '#roleTable'
@@ -37,9 +58,11 @@
             , totalRow: true //开启合计行
             , limit: 3   //默认十条数据一页
             , limits: [10, 20, 30, 50]  //数据分页条
+            //templet:'#zizeng'
             , cols: [
                 [ //表头
                     {type: 'checkbox', fixed: 'left'}
+                    , {field: 'zizeng', type: 'numbers', title: '序号', width: 80, fixed: 'left'}
                     , {field: 'id', title: 'ID', width: 80, sort: true, fixed: 'left'}
                     , {field: 'rolename', title: '角色名称', sort: true}
                     , {field: 'describe', title: '角色描述'}
@@ -52,19 +75,19 @@
             var checkStatus = table.checkStatus(obj.config.id);
             switch (obj.event) {
                 case 'addRole':
-                    layer.msg("这是查询", { icon: 6, anim: 6 });
+                    layer.msg("这是查询", {icon: 6, anim: 6});
                     break;
                 case 'getInsert':
-                    layer.msg("这是新增", { icon: 6, anim: 6 });
+                    layer.msg("这是新增", {icon: 6, anim: 6});
                     break;
                 case 'getUpdate':
-                    layer.msg("这是修改", { icon: 6, anim: 6 });
+                    layer.msg("这是修改", {icon: 6, anim: 6});
                     break;
                 case 'getDelete':
-                    layer.msg("这是删除", { icon: 6, anim: 6 });
+                    layer.msg("这是删除", {icon: 6, anim: 6});
                     break;
                 case 'getRefresh':
-                    layer.msg("这是刷新", { icon: 6, anim: 6 });
+                    layer.msg("这是刷新", {icon: 6, anim: 6});
                     //location.reload();
                     break;
             }
@@ -93,26 +116,49 @@
                     });
                 });
             } else if (obj.event === 'edit') {
-                layer.prompt({
-                    formType: 2
-                    , value: data.email
-                }, function (value, index) {
-                    obj.update({
-                        email: value
-                    });
-                    layer.close(index);
+                layer.open({
+                    title: '编辑の角色',
+                    type: 1,
+                    area: ['420px', '330px'],
+                    btn: ['确定', '取消'],
+                    maxmin: true,
+                    shadeClose: true,
+                    content: $('#editForm'),
+                    shade: 0 // 不显示遮罩
+                    , success: function (layero, index) {
+                        $('#id').val(data.id);
+                        $('#rename').val(data.rolename);
+                        $('#des').val(data.describe);
+                    }, btn1: function (index, layero) {
+                        $.ajax({
+                            url: '/LoginController/editRoleInfo',
+                            type: 'POST',
+                            dataType: 'json',
+                            data: {id: $('#id').val(), rolename: $('#rename').val(), des: $('#des').val()},
+                            success: function (msg) {
+                                var code = msg.code;
+                                if (code === 200) {
+                                    layer.msg(msg.msg, {icon: 6});
+                                    layer.closeAll();
+                                    table.reload('roleTable',{});//弹出层结束后，刷新主页面
+                                } else {
+                                    layer.msg(msg.msg, {icon: 5});
+                                }
+                            }
+                        });
+                    }
                 });
             }
         });
     });
-    $("#addRole").click(function(){
+    $("#addRole").click(function () {
         layer.open({
-            type : 2,
-            title : '添加の角色',
-            area : ['420px', '330px' ],
-            fix : false, // �
-            content : '/addRole',
-            end : function() {
+            type: 2,
+            title: '添加の角色',
+            area: ['420px', '330px'],
+            fix: false, // �
+            content: '/addRole',
+            end: function () {
             }
         });
     });

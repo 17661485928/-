@@ -37,4 +37,6 @@ public interface UserService {
     Map<String, Object> delRole(String id);
 
     Map<String, Object> addRoleInfo(String rolename, String des);
+
+    Map<String, Object> editRoleInfo(String id, String rolename, String des);
 }

@@ -110,4 +110,22 @@ public class UserServiceImpl implements UserService {
         }
         return responseMap;
     }
+
+    @Override
+    public Map<String, Object> editRoleInfo(String id, String rolename, String des) {
+        Map<String, Object> responseMap = new HashMap<>();
+        Map<String,Object> requestParam = new HashMap<>();
+        requestParam.put("id",id);
+        requestParam.put("rolename",rolename);
+        requestParam.put("des",des);
+        Integer results = userDao.editRoleInfo(requestParam);
+        if(results==1){
+            responseMap.put("code",200);
+            responseMap.put("msg","修改成功！");
+        } else {
+            responseMap.put("code",201);
+            responseMap.put("msg","修改失败！");
+        }
+        return responseMap;
+    }
 }

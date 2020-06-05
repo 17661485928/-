@@ -42,6 +42,9 @@
                 #{des}
             )
     </insert>
+    <update id="editRoleInfo" parameterType="java.util.Map">
+        UPDATE SYS_ROLE SET rolename=#{rolename}, `describe`=#{des} WHERE ID=#{id}
+    </update>
     <delete id="delRole">
         DELETE FROM SYS_ROLE WHERE ID=#{id}
     </delete>
