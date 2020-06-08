@@ -127,6 +127,24 @@ public class JumpController {
         model.addAttribute("roleId", roleId);
         return "management/roleAuthorization";
     }
+    @RequestMapping(value = "/addRoleToUser")
+    public Object addRoleToUser(Model model, HttpServletRequest request) {
+        String ids = request.getParameter("ids");
+        model.addAttribute("ids", ids);
+        return "management/addRoleToUser";
+    }
+    @RequestMapping(value = "/userAllRole")
+    public Object userAllRole(Model model, HttpServletRequest request) {
+        String userId = request.getParameter("userId");
+        model.addAttribute("userId", userId);
+        return "management/userAllRole";
+    }
+    @RequestMapping(value = "/roleViewPerm")
+    public Object roleViewPerm(Model model, HttpServletRequest request) {
+        String roleId = request.getParameter("roleId");
+        model.addAttribute("roleId", roleId);
+        return "management/roleViewPerm";
+    }
 
     /**
      * 注销

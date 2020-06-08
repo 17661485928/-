@@ -54,6 +54,9 @@
     <insert id="roleAuthorization" parameterType="java.util.Map">
         INSERT INTO `sys_role_permission` (`roleId`, `permissionId`) VALUES (#{roleId}, #{id});
     </insert>
+    <insert id="roleToUser" parameterType="java.util.Map">
+        INSERT INTO `sys_user_role` (`userId`, `roleId`) VALUES (#{userIds}, #{roleId});
+    </insert>
     <update id="editRoleInfo" parameterType="java.util.Map">
         UPDATE SYS_ROLE SET rolename=#{rolename}, `describe`=#{des} WHERE ID=#{id}
     </update>
@@ -65,6 +68,13 @@
     </delete>
     <delete id="delPerm">
         DELETE FROM `sys_permission` WHERE ID=#{id}
+    </delete>
+    <delete id="delUser" parameterType="java.util.List">
+        DELETE FROM SYS_USER WHERE ID IN
+        <foreach collection="idList" item="item"
+                 open="(" separator="," close=")">
+            #{item}
+        </foreach>
     </delete>
 
     <!-- 根据用户名查询用户信息 -->
@@ -144,5 +154,46 @@
     <!--查询用户分页总条数-->
     <select id="userAllCount" resultType="java.lang.Integer">
         SELECT COUNT(1) FROM SYS_USER
+    </select>
+    <select id="queryUserById" resultType="java.util.Map" parameterType="java.util.Map">
+        SELECT USERID,ROLEID FROM SYS_USER_ROLE WHERE USERID = #{userId}
+    </select>
+    <select id="userAllroleInfoList" resultType="java.util.Map" parameterType="java.util.Map">
+        SELECT
+            U.*
+        FROM
+            SYS_ROLE U
+        INNER JOIN SYS_USER_ROLE U_R ON U.ID = U_R.ROLEID
+        WHERE
+            U_R.USERID = #{userId}
+            LIMIT #{statr},#{end}
+    </select>
+    <select id="userAllroleInfoCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT
+             COUNT(1)
+        FROM
+            SYS_ROLE U
+        INNER JOIN SYS_USER_ROLE U_R ON U.ID = U_R.ROLEID
+        WHERE
+            U_R.USERID = #{userId}
+    </select>
+    <select id="roleAllPermInfoList" resultType="java.util.Map" parameterType="java.util.Map">
+        SELECT
+            U.*
+        FROM
+            `sys_permission` U
+        INNER JOIN SYS_ROLE_PERMISSION U_R ON U.ID = U_R.PERMISSIONID
+        WHERE
+            U_R.ROLEID = #{roleId}
+            LIMIT #{statr},#{end}
+    </select>
+    <select id="roleAllPermInfoCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT
+             COUNT(1)
+        FROM
+            `sys_permission` U
+        INNER JOIN SYS_ROLE_PERMISSION U_R ON U.ID = U_R.PERMISSIONID
+        WHERE
+            U_R.ROLEID = #{roleId}
     </select>
 </mapper>

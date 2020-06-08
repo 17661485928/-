@@ -3,6 +3,8 @@ package com.kafei.usercoffee.dao;
 import com.kafei.usercoffee.model.Permission;
 import com.kafei.usercoffee.model.Role;
 import com.kafei.usercoffee.model.User;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 import java.util.Map;
 
@@ -66,4 +68,18 @@ public interface UserDao {
     Integer editPermInfo(Map<String, Object> requestParam);
 
     Integer roleAuthorization(Map<String, Object> requestParam);
+
+    Integer roleToUser(Map<String, Object> requestParam);
+
+    List<Map<String,Object>> queryUserById(Map<String, Object> requestParam);
+
+    List<Map<String, Object>> userAllroleInfoList(Map<String, Object> requestParam);
+
+    Integer userAllroleInfoCount(Map<String, Object> requestParam);
+
+    List<Map<String, Object>> roleAllPermInfoList(Map<String, Object> requestParam);
+
+    Integer roleAllPermInfoCount(Map<String, Object> requestParam);
+
+    Integer delUser(@Param("idList") List<String> idList);
 }

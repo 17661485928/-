@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>角色权限详情</title>
+    <link rel="stylesheet" th:href="@{/static/layui/css/layui.css}" media="all">
+</head>
+<body>
+<table id="permTable" class="layui-hide" lay-filter="permTable"></table>
+<input type="hidden" th:value="${roleId}" id="roleId"/>
+<script th:src="@{/static/layui/layui.all.js}"></script>
+<script type="text/html" id="zizeng">
+    {{d.LAY_TABLE_INDEX+1}}
+</script>
+<script>
+    layui.use(['form', 'layer', 'table', 'jquery'], function () {
+        var form = layui.form
+            , layer = layui.layer
+            , $ = layui.jquery,
+            table = layui.table;
+        //第一个实例
+        table.render({
+            elem: '#permTable'
+            , id: 'permTable'
+            , height: 530
+            //,width:1130
+            , url: '/LoginController/roleAllPermInfoList?roleId=' + $("#roleId").val() //数据接口
+            //,toolbar: '#roletoolbar' //开启头部工具栏，并为其绑定左侧模板
+            , page: true //开启分页
+            , toolbar: '#permtool' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+            , totalRow: true //开启合计行
+            , limit: 10   //默认十条数据一页
+            , limits: [10, 20, 30, 50]  //数据分页条
+            //templet:'#zizeng'
+            , cols: [
+                [ //表头
+                    {type: 'checkbox', fixed: 'left'}
+                    , {field: 'zizeng', type: 'numbers', title: '序号', width: 80, fixed: 'left'}
+                    , {field: 'id', title: 'ID', hide: true, width: 80, sort: true, fixed: 'left'}
+                    , {field: 'url', title: '请求URL'}
+                    , {field: 'permName', title: '权限名称'}
+                    , {field: 'permTag', title: '权限标识符'}
+                ]
+            ]
+        });
+    });
+</script>
+</body>
+</html>

@@ -139,4 +139,37 @@ public class LoginController {
         Map<String,Object> dataMap = userService.roleAuthorization(id,roleId);
         return JSONObject.toJSONString(dataMap);
     }
+    @RequestMapping(value = "/roleToUser")
+    @ResponseBody
+    public String roleToUser(HttpServletRequest request) {
+        String id = request.getParameter("id");
+        String ids = request.getParameter("ids");
+        Map<String,Object> dataMap = userService.roleToUser(id,ids);
+        return JSONObject.toJSONString(dataMap);
+    }
+    @RequestMapping(value = "/userAllroleInfoList")
+    @ResponseBody
+    public String userAllroleInfoList(HttpServletRequest request) {
+        String userId = request.getParameter("userId");
+        String page = request.getParameter("page");//当前页码
+        String limit = request.getParameter("limit");//每页中数据的条数
+        Map<String,Object> dataMap = userService.userAllroleInfoList(userId,page,limit);
+        return JSONObject.toJSONString(dataMap);
+    }
+    @RequestMapping(value = "/roleAllPermInfoList")
+    @ResponseBody
+    public String roleAllPermInfoList(HttpServletRequest request) {
+        String roleId = request.getParameter("roleId");
+        String page = request.getParameter("page");//当前页码
+        String limit = request.getParameter("limit");//每页中数据的条数
+        Map<String,Object> dataMap = userService.roleAllPermInfoList(roleId,page,limit);
+        return JSONObject.toJSONString(dataMap);
+    }
+    @RequestMapping(value = "/delUser")
+    @ResponseBody
+    public String delUser(HttpServletRequest request) {
+        String userIds = request.getParameter("userIds");
+        Map<String,Object> dataMap = userService.delUser(userIds);
+        return JSONObject.toJSONString(dataMap);
+    }
 }

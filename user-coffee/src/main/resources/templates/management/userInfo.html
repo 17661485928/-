@@ -11,8 +11,9 @@
 <script type="text/html" id="usertool">
     <div class="layui-btn-container">
         <button class="layui-btn layui-btn-sm" lay-even="addUser" id="addUser">添加の用户</button>
-        <button class="layui-btn layui-btn-sm" lay-even="getCheckLength">删除の用户</button>
+        <button class="layui-btn layui-btn-sm" lay-even="delUser" id="delUser">删除の用户</button>
         <button class="layui-btn layui-btn-sm" lay-even="isAll">修改の用户</button>
+        <button class="layui-btn layui-btn-sm" lay-even="isAll" id="addRoleToUser">用户の添加角色</button>
     </div>
 </script>
 <script type="text/html" id="zizeng">
@@ -34,6 +35,7 @@
             , url: '/LoginController/userInfoList' //数据接口
             //,toolbar: '#roletoolbar' //开启头部工具栏，并为其绑定左侧模板
             , page: true //开启分页
+            , theme: '#1E9FFF'
             , toolbar: '#usertool' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
             , totalRow: true //开启合计行
             , limit: 10   //默认十条数据一页
@@ -44,13 +46,13 @@
                     {type: 'checkbox', fixed: 'left'}
                     , {field: 'zizeng', type: 'numbers', title: '序号', width: 40, fixed: 'left'}
                     , {field: 'id', title: 'ID', hide: true, width: 80, sort: true, fixed: 'left'}
-                    , {field: 'username', title: '用户名称'}
+                    , {field: 'username', event: 'userViewRole', style: 'color: #f67d06;', title: '用户名称'}
                     , {field: 'realname', title: '真实姓名'}
                     , {field: 'password', title: '密码'}
                     , {field: 'realage', hide: true, title: '真实年龄'}
                     , {field: 'birthDate', hide: true, title: '出生日期'}
                     , {field: 'email', title: '电子邮箱'}
-                    , {field: 'mobilePhone', title: '手机号',width: 120}
+                    , {field: 'mobilePhone', title: '手机号', width: 120}
                     , {field: 'luckyColor', hide: true, title: '幸运颜色'}
                     , {
                     field: 'createDate', title: '创建日期',
@@ -78,62 +80,20 @@
                 ]
             ]
         });
-        //监听行工具事件
-        table.on('tool(roleTable)', function (obj) {
+        table.on('tool(userTable)', function (obj) {
             var data = obj.data;
-            if (obj.event === 'del') {
-                layer.confirm('真的删除行么', function (index) {
-                    obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
-                    layer.close(index);
-                    //向服务端发送删除指令
-                    $.ajax({
-                        url: "/LoginController/delRole",
-                        type: "POST",
-                        data: {"id": data.id},
-                        dataType: "json",
-                        success: function (result) {
-                            if (result.code === 1) {
-                                layer.msg(result.msg);
-                            } else {
-                                layer.msg(result.msg);
-                            }
-                            table.reload('roleTable', {})    //删除之后,刷新表格
-                        }
-                    });
-                });
-            } else if (obj.event === 'edit') {
-                layer.open({
-                    title: '编辑の角色',
-                    type: 1,
-                    area: ['420px', '330px'],
-                    btn: ['确定', '取消'],
+            if (obj.event === "userViewRole") {
+                // 处理你的业务逻辑
+                var index = layer.open({
+                    type: 2,
+                    title: '查看用户有哪些角色',
                     maxmin: true,
                     shadeClose: true,
-                    content: $('#editForm'),
-                    shade: 0 // 不显示遮罩
-                    , success: function (layero, index) {
-                        $('#id').val(data.id);
-                        $('#rename').val(data.rolename);
-                        $('#des').val(data.describe);
-                    }, btn1: function (index, layero) {
-                        $.ajax({
-                            url: '/LoginController/editRoleInfo',
-                            type: 'POST',
-                            dataType: 'json',
-                            data: {id: $('#id').val(), rolename: $('#rename').val(), des: $('#des').val()},
-                            success: function (msg) {
-                                var code = msg.code;
-                                if (code === 200) {
-                                    layer.msg(msg.msg, {icon: 6});
-                                    layer.closeAll();
-                                    table.reload('roleTable', {});//弹出层结束后，刷新主页面
-                                } else {
-                                    layer.msg(msg.msg, {icon: 5});
-                                }
-                            }
-                        });
+                    content: '/userAllRole?userId=' + data.id,
+                    end: function () {
                     }
                 });
+                layer.full(index);
             }
         });
         $("#addUser").click(function () {
@@ -147,6 +107,56 @@
                 }
             });
             layer.full(index);
+        });
+        $("#addRoleToUser").click(function () {
+            var data = table.checkStatus('userTable').data;   // table1为表格id
+            var ids = [];
+            $(data).each(function (i, o) {//o即为表格中一行的数据
+                ids.push(o.id);
+            });
+            if (ids.length < 1) {
+                layer.msg("请选择一个用户，在进行赋角色！");
+                return false;
+            }
+            ids = ids.join(",");
+            var index = layer.open({
+                type: 2,
+                title: '添加の用户',
+                maxmin: true,
+                shadeClose: true,
+                content: '/addRoleToUser?ids=' + ids,
+                end: function () {
+                }
+            });
+            layer.full(index);
+        });
+        $("#delUser").click(function () {
+            var data = table.checkStatus('userTable').data;   // table1为表格id
+            var ids = [];
+            $(data).each(function (i, o) {//o即为表格中一行的数据
+                ids.push(o.id);
+            });
+            if (ids.length < 1) {
+                layer.msg("请选择一条数据！");
+                return false;
+            }
+            ids = ids.join(",");
+            layer.confirm('真的删除行么', function (index) {
+                $.ajax({
+                    url: "/LoginController/delUser",
+                    type: "POST",
+                    data: {"userIds": ids},
+                    dataType: "json",
+                    success: function (result) {
+                        if (result.code === 200) {
+                            layer.msg(result.msg);
+                        } else {
+                            layer.msg(result.msg);
+                        }
+                    }
+                });
+            });
+            table.reload('userTable');    //删除之后,刷新表格
         });
     });
 </script>

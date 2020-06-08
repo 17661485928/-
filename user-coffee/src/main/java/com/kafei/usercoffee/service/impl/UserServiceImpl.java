@@ -9,10 +9,7 @@ import com.kafei.usercoffee.util.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author kafei
@@ -66,9 +63,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public Map<String,Object> roleInfoList(String page, String limit) {
         Map<String,Object> requestParam = new HashMap<>();
-        Integer statr = (Integer.valueOf(page)-1)*Integer.valueOf(limit);//开始查询位置
+        //开始查询位置
+        Integer statr = (Integer.parseInt(page)-1)*Integer.valueOf(limit);
         requestParam.put("statr",statr);
-        requestParam.put("end",Integer.valueOf(limit));//结束位置
+        //结束位置
+        requestParam.put("end",Integer.valueOf(limit));
         List<Role> roleList = userDao.roleInfoList(requestParam);
         Integer roleCount = userDao.roleAllCount(requestParam);
         Map<String,Object> responseMap = new HashMap<>();
@@ -242,6 +241,95 @@ public class UserServiceImpl implements UserService {
         } else {
             responseMap.put("code",201);
             responseMap.put("msg","授权失败！");
+        }
+        return responseMap;
+    }
+    public boolean queryUserById( Map<String,Object> requestParam){
+        String roleId = requestParam.get("roleId").toString();
+       List<Map<String,Object>> resMap = userDao.queryUserById(requestParam);
+       String queryRoleId = "";
+       if (resMap.size()!=0){
+            for(Map<String,Object> map:resMap){
+                queryRoleId = map.get("ROLEID").toString();
+                if (queryRoleId.equals(roleId)){
+                    return true;
+                }
+            }
+       }
+       return false;
+    }
+    @Override
+    public Map<String, Object> roleToUser(String id, String ids) {
+        Map<String, Object> responseMap = new HashMap<>();
+        Map<String,Object> requestParam = new HashMap<>();
+        requestParam.put("roleId",Integer.valueOf(id));
+        String[] idsArray = ids.split(",");
+        Integer results = 0;
+        for(String userId:idsArray){
+            requestParam.put("userIds",Integer.valueOf(userId));
+            boolean bool = queryUserById(requestParam);
+            if(bool){
+                continue;
+            }
+            results = userDao.roleToUser(requestParam);
+        }
+        if(results==1){
+            responseMap.put("code",200);
+            responseMap.put("msg","用户赋角色成功！");
+        } else {
+            responseMap.put("code",201);
+            responseMap.put("msg","用户赋角色失败！");
+        }
+        return responseMap;
+    }
+
+    @Override
+    public Map<String, Object> userAllroleInfoList(String userId,String page, String limit) {
+        Map<String,Object> requestParam = new HashMap<>();
+        Integer statr = (Integer.valueOf(page)-1)*Integer.valueOf(limit);//开始查询位置
+        requestParam.put("statr",statr);
+        requestParam.put("end",Integer.valueOf(limit));//结束位置
+        requestParam.put("userId",Integer.valueOf(userId));
+        List<Map<String,Object>> roleList = userDao.userAllroleInfoList(requestParam);
+        Integer roleCount = userDao.userAllroleInfoCount(requestParam);
+        return getStringObjectMap(roleList, roleCount);
+    }
+
+    @Override
+    public Map<String, Object> roleAllPermInfoList(String roleId, String page, String limit) {
+        Map<String,Object> requestParam = new HashMap<>(3);
+        //开始查询位置
+        Integer statr = (Integer.parseInt(page)-1)*Integer.parseInt(limit);
+        requestParam.put("statr",statr);
+        requestParam.put("end",Integer.valueOf(limit));//结束位置
+        requestParam.put("roleId",Integer.valueOf(roleId));
+        List<Map<String,Object>> roleList = userDao.roleAllPermInfoList(requestParam);
+        Integer roleCount = userDao.roleAllPermInfoCount(requestParam);
+        return getStringObjectMap(roleList, roleCount);
+    }
+
+    private Map<String, Object> getStringObjectMap(List<Map<String, Object>> roleList, Integer roleCount) {
+        Map<String,Object> responseMap = new HashMap<>(4);
+        responseMap.put("code",0);
+        responseMap.put("msg","");
+        responseMap.put("count",roleCount);
+        responseMap.put("data",roleList);
+        return responseMap;
+    }
+
+    @Override
+    public Map<String, Object> delUser(String userIds) {
+        Map<String, Object> responseMap = new HashMap<>();
+        String[] idsArray = userIds.split(",");
+        List<String> idList = new ArrayList<>(idsArray.length);
+        Collections.addAll(idList, idsArray);
+        Integer results = userDao.delUser(idList);
+        if(results!=0){
+            responseMap.put("code",200);
+            responseMap.put("msg","删除用户成功！");
+        } else {
+            responseMap.put("code",201);
+            responseMap.put("msg","删除用户失败！");
         }
         return responseMap;
     }
