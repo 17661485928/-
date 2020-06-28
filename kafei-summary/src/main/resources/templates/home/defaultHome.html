@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+</head>
+<body>
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+    <legend>拖拽上传</legend>
+</fieldset>
+<div class="layui-upload-drag" id="uploadId">
+    <i class="layui-icon"></i>
+    <p>点击上传，或将文件拖拽到此处</p>
+    <div class="layui-hide" id="uploadDemoView">
+        <hr>
+        <img src="" alt="上传成功后渲染" style="max-width: 196px">
+    </div>
+</div>
+
+<script src="/static/layui/layui.all.js"></script>
+<script>
+    layui.use('upload', function () {
+        var $ = layui.jquery, upload = layui.upload;
+        //拖拽上传
+        upload.render({
+            elem: '#uploadId'
+            , url: '/SysUserController/uploadAvatarIcon' //改成您自己的上传接口
+            , done: function (msg) {
+                var code = msg.code;
+                if (code === 200) {
+                    layer.msg(msg.msg, {icon: 6});
+                } else {
+                    layer.msg(msg.msg, {icon: 5});
+                }
+                layui.$('#uploadDemoView').removeClass('layui-hide').find('img').attr('src', msg.filePath);
+                console.log(msg)
+            }
+        });
+    });
+</script>
+</body>
+</html>

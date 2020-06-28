@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zn">
+<head>
+    <meta charset="UTF-8">
+    <title>咖啡の用户</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+</head>
+<body>
+<table id="userTable" class="layui-hide" lay-filter="userTable"></table>
+<!--//这里是弹出层的表单信息
+//表单的id用于表单的选择，style是在本页隐藏，只有点击编辑才会弹出-->
+<div class="layui-row" id="sysUserFrom" style="display:none;">
+    <form class="layui-form layui-from-pane" action="" style="margin-top:20px">
+        <input type="text" name="userId" id="userId" autocomplete="off" style="display: none" class="layui-input">
+        <input type="text" name="deptId" id="deptId" autocomplete="off" style="display: none" class="layui-input">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">登录账户：</label>
+                <div class="layui-input-inline">
+                    <input type="tel" id="loginName" name="loginName" lay-verify="required" placeholder="请输入登录账户"
+                           autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">用户昵称：</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="userName" name="userName" lay-verify="required" placeholder="请输入用户昵称"
+                           autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">登录密码：</label>
+                <div class="layui-input-inline">
+                    <input type="tel" id="password" name="password" lay-verify="required" placeholder="请输入登录密码"
+                           autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">盐加密：</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="salt" name="salt" lay-verify="required" placeholder="请输入盐加密"
+                           autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">手机号：</label>
+                <div class="layui-input-inline">
+                    <input type="tel" id="phone" name="phone" lay-verify="phone" placeholder="请输入手机号" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">用户邮箱：</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="email" name="email" lay-verify="email" placeholder="请输入用户邮箱"
+                           autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">用户类型：</label>
+                <div class="layui-input-inline">
+                    <input type="tel" id="userType" name="userType" placeholder="请输入用户类型" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">头像路径：</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="avatar" name="avatar" placeholder="请输入头像路径"
+                           autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">性别：</label>
+            <div class="layui-input-inline">
+                <input type="radio" name="sex" value="0" title="男" checked>
+                <input type="radio" name="sex" value="1" title="女">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">账户装态：</label>
+                <div class="layui-input-inline">
+                    <input type="radio" name="status" value="0" title="正常">
+                    <input type="radio" name="status" value="1" title="停用">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">删除标志：</label>
+                <div class="layui-input-inline">
+                    <input type="radio" name="delFlag" value="0" title="存在">
+                    <input type="radio" name="delFlag" value="1" title="删除">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">备注：</label>
+                <div class="layui-input-block">
+                        <textarea placeholder="请输入内容" id = "remark" class="layui-textarea"></textarea>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="addSysUser">添加用户信息</button>
+        <button class="layui-btn layui-btn-sm" lay-event="editSysUser">编辑用户信息</button>
+        <button class="layui-btn layui-btn-sm" lay-event="delSysUser">删除用户信息</button>
+    </div>
+</script>
+<script src="/static/layui/layui.all.js"></script>
+<script type="text/html" id="zizeng">
+    {{d.LAY_TABLE_INDEX+1}}
+</script>
+<script>
+    layui.use(['form', 'layer', 'table', 'jquery'], function () {
+        var form = layui.form
+            , layer = layui.layer
+            , $ = layui.jquery,
+            util = layui.util,
+            table = layui.table;
+
+        //第一个实例
+        var sysUserT = table.render({
+            elem: '#userTable'
+            , id: 'userTable'
+            , height: 525
+            //,width:1130
+            , url: '/SysUserController/sysUserInfoList' //数据接口
+            //,toolbar: '#roletoolbar' //开启头部工具栏，并为其绑定左侧模板
+            , page: true //开启分页
+            , theme: '#1E9FFF'
+            , toolbar: '#toolbarDemo' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+            , totalRow: true //开启合计行
+            , limit: 10   //默认十条数据一页
+            , limits: [10, 20, 30, 50]  //数据分页条
+            //templet:'#zizeng'
+            , cols: [
+                [ //表头
+                    {type: 'checkbox', fixed: 'left'}
+                    , {field: 'zizeng', type: 'numbers', title: '序号', width: 40, fixed: 'left'}
+                    , {field: 'user_id', title: '用户ID', hide: true, sort: true, fixed: 'left'}
+                    , {field: 'dept_id', title: '部门ID', hide: true, sort: true, fixed: 'left'}
+                    , {field: 'login_name', title: '登录账号', fixed: 'left'}
+                    , {field: 'user_name', title: '用户昵称', fixed: 'left'}
+                    , {field: 'user_type', title: '用户类型', hide: true, fixed: 'left'}
+                    , {field: 'email', title: '用户邮箱', fixed: 'left'}
+                    , {field: 'phonenumber', title: '手机号'}
+                    , {
+                    field: 'sex', hide: true, title: '性别'
+                    , templet: function (d) {//用户性别（0男 1女 2未知）
+                        if (d.sex == 0) {
+                            return '男'
+                        } else if (d.sex == 1) {
+                            return '女'
+                        } else {
+                            return '未知'
+                        }
+                    }
+                }
+                    , {field: 'avatar', hide: true, title: '头像路径'}
+                    , {field: 'password', title: '密码'}
+                    , {field: 'salt', hide: true, title: '盐加密'}
+                    , {
+                    field: 'status', title: '帐号状态'
+                    , templet: function (d) {//（0正常 1停用）
+                        if (d.status == 0) {
+                            return '正常'
+                        } else if (d.status == 1) {
+                            return '停用'
+                        }
+                    }
+                }
+                    , {
+                    field: 'del_flag', title: '删除标志'
+                    , templet: function (d) {//（0代表存在 1代表删除）
+                        if (d.status == 0) {
+                            return '存在'
+                        } else if (d.status == 1) {
+                            return '删除'
+                        }
+                    }
+                }
+                    , {field: 'login_ip', title: '最后登陆IP'}
+                    , {
+                    field: 'login_date', title: '最后登陆时间',
+                    templet: function (d) {
+                        if (d.login_date == null) {
+                            return "";
+                        }
+                        return util.toDateString(d.login_date.time, "yyyy-MM-dd HH:mm:ss");
+                    }
+                }
+                    , {field: 'create_by', hide: true, title: '创建者'}
+                    , {
+                    field: 'create_time', hide: true, title: '创建时间',
+                    templet: function (d) {
+                        if (d.create_time == null) {
+                            return "";
+                        }
+                        return util.toDateString(d.create_time.time, "yyyy-MM-dd HH:mm:ss");
+                    }
+                }
+                    , {field: 'update_by', hide: true, title: '更新者'}
+                    , {
+                    field: 'update_time', hide: true, title: '修改时间',
+                    templet: function (d) {
+                        if (d.update_time == null) {
+                            return "";
+                        }
+                        return util.toDateString(d.update_time.time, "yyyy-MM-dd HH:mm:ss");
+                    }
+                }
+                    , {field: 'remark', hide: true, title: '备注'}
+                ]
+            ]
+        });
+        //头工具栏事件
+        table.on('toolbar(userTable)', function (obj) {
+            var checkStatus = table.checkStatus(obj.config.id);
+            var data = checkStatus.data;
+            switch (obj.event) {
+                case 'addSysUser':
+                    layer.open({
+                        //layer提供了5种层类型。可传入的值有：0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
+                        type: 1,
+                        title: "添加用户信息",
+                        area: ['750px', '460px'],
+                        btn: ['确定', '取消'],
+                        maxmin: true,
+                        shadeClose: true,
+                        content: $("#sysUserFrom"),//引用的弹出层的页面层的方式加载修改界面表单
+                        shade: 0 // 不显示遮罩
+                        , btn1: function (index, layero) {
+                            var deptId = $('#deptId').val();
+                            var loginName = $('#loginName').val();
+                            var userName = $('#userName').val();
+                            var phone = $('#phone').val();
+                            var email = $('#email').val();
+                            var userType = $('#userType').val();
+                            var avatar = $('#avatar').val();
+                            var password = $('#password').val();
+                            var salt = $('#salt').val();
+                            var sex = $("input[name=sex]:checked").val();
+                            var status = $("input[name=status]:checked").val();
+                            var delFlag = $("input[name=delFlag]:checked").val();
+                            var remark = $('#remark').val();
+                            $.ajax({
+                                url: '/SysUserController/addSysUserInfo',
+                                type: 'POST',
+                                dataType: 'json',
+                                data: {deptId: deptId, loginName: loginName,
+                                    userName:userName,phone:phone,email:email,userType:userType,
+                                    avatar:avatar,password:password,salt:salt,sex:sex,status:status,
+                                    delFlag:delFlag,remark:remark
+                                },
+                                success: function (msg) {
+                                    var code = msg.code;
+                                    if (code === 200) {
+                                        layer.msg(msg.msg, {icon: 6});
+                                        layer.closeAll();
+                                        sysUserT.reload();    //编辑之后,刷新表格
+                                    } else {
+                                        layer.msg(msg.msg, {icon: 5});
+                                    }
+                                }
+                            });
+                        }
+                    });
+                    break;
+                case 'delSysUser':
+                    var ids = [];
+                    $(data).each(function (i, o) {//o即为表格中一行的数据
+                        ids.push(o.user_id);
+                    });
+                    if (ids.length < 1) {
+                        layer.msg("请选择一条数据！");
+                        return false;
+                    }
+                    ids = ids.join(",");
+                    layer.confirm('真的删除行么!', function (index) {
+                        $.ajax({
+                            url: "/SysUserController/delSysUser",
+                            type: "POST",
+                            data: {"userIds": ids},
+                            dataType: "json",
+                            success: function (result) {
+                                if (result.code === 200) {
+                                    layer.msg(result.msg);
+                                    sysUserT.reload();    //删除之后,刷新表格
+                                } else {
+                                    layer.msg(result.msg);
+                                }
+                            }
+                        });
+                    });
+                    break;
+                case 'editSysUser':
+                    var dataSize = data.length;
+                    if(dataSize<1){
+                        layer.msg("请选择一条需要编辑的数据！");
+                        return ;
+                    } else if (dataSize>1){
+                        layer.msg("只能选择一条需要编辑的数据！");
+                        return ;
+                    }
+                    layer.open({
+                        //layer提供了5种层类型。可传入的值有：0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
+                        type: 1,
+                        title: "编辑用户信息",
+                        area: ['750px', '460px'],
+                        btn: ['确定', '取消'],
+                        maxmin: true,
+                        shadeClose: true,
+                        content: $("#sysUserFrom"),//引用的弹出层的页面层的方式加载修改界面表单
+                        shade: 0 // 不显示遮罩
+                        , success: function (layero, index) {
+                            $('#userId').val(data[0].user_id);
+                            $('#deptId').val(data[0].dept_id);
+                            $('#loginName').val(data[0].login_name);
+                            $('#userName').val(data[0].user_name);
+                            $('#phone').val(data[0].phonenumber);
+                            $('#email').val(data[0].email);
+                            $('#userType').val(data[0].user_type);
+                            $('#avatar').val(data[0].avatar);
+                            $('#password').val(data[0].password);
+                            $('#salt').val(data[0].salt);
+                            $("input[name=sex][value='0']").attr("checked", data[0].sex == 0 ? true : false);
+                            $("input[name=sex][value='1']").attr("checked", data[0].sex == 1 ? true : false);
+                            $("input[name=status][value='0']").attr("checked", data[0].status == 0 ? true : false);
+                            $("input[name=status][value='1']").attr("checked", data[0].status == 1 ? true : false);
+                            $("input[name=delFlag][value='0']").attr("checked", data[0].del_flag == 0 ? true : false);
+                            $("input[name=delFlag][value='1']").attr("checked", data[0].del_flag == 1 ? true : false);
+                            $('#remark').val(data[0].remark);
+                            form.render(); //更新全部
+                        }, btn1: function (index, layero) {
+                            var userId = $('#userId').val();
+                            var deptId = $('#deptId').val();
+                            var loginName = $('#loginName').val();
+                            var userName = $('#userName').val();
+                            var phone = $('#phone').val();
+                            var email = $('#email').val();
+                            var userType = $('#userType').val();
+                            var avatar = $('#avatar').val();
+                            var password = $('#password').val();
+                            var salt = $('#salt').val();
+                            var sex = $("input[name=sex]:checked").val();
+                            var status = $("input[name=status]:checked").val();
+                            var delFlag = $("input[name=delFlag]:checked").val();
+                            var remark = $('#remark').val();
+                            $.ajax({
+                                url: '/SysUserController/editSysUserInfo',
+                                type: 'POST',
+                                dataType: 'json',
+                                data: {userId: userId, deptId: deptId, loginName: loginName,
+                                    userName:userName,phone:phone,email:email,userType:userType,
+                                    avatar:avatar,password:password,salt:salt,sex:sex,status:status,
+                                    delFlag:delFlag,remark:remark
+                                },
+                                success: function (msg) {
+                                    var code = msg.code;
+                                    if (code === 200) {
+                                        layer.msg(msg.msg, {icon: 6});
+                                        layer.closeAll();
+                                        sysUserT.reload();    //编辑之后,刷新表格
+                                    } else {
+                                        layer.msg(msg.msg, {icon: 5});
+                                    }
+                                }
+                            });
+                        }
+                    });
+                    break;
+                //自定义头工具栏右侧图标 - 提示
+                case 'LAYTABLE_TIPS':
+                    layer.alert('这是工具栏右侧自定义的一个图标按钮');
+                    break;
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

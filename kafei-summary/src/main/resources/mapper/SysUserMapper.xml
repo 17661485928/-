@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coffee.kafeisummary.dao.SysUserDao">
+
+    <resultMap type="com.coffee.kafeisummary.pojo.SysUserPojo" id="SysUserResult">
+        <id property="user_id" column="user_id"/>
+        <result property="dept_id" column="dept_id"/>
+        <result property="login_name" column="login_name"/>
+        <result property="user_name" column="user_name"/>
+        <result property="user_type" column="user_type"/>
+        <result property="email" column="email"/>
+        <result property="phonenumber" column="phonenumber"/>
+        <result property="sex" column="sex"/>
+        <result property="avatar" column="avatar"/>
+        <result property="password" column="password"/>
+        <result property="salt" column="salt"/>
+        <result property="status" column="status"/>
+        <result property="del_flag" column="del_flag"/>
+        <result property="login_ip" column="login_ip"/>
+        <result property="login_date" column="login_date"/>
+        <result property="create_by" column="create_by"/>
+        <result property="create_time" column="create_time"/>
+        <result property="update_by" column="update_by"/>
+        <result property="update_time" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+	<sql id="selectSysUser">
+       SELECT `user_id`, `dept_id`, `login_name`, `user_name`, `user_type`, `email`, `phonenumber`, `sex`, `avatar`, `password`, `salt`, `status`, `del_flag`, `login_ip`, `login_date`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`
+       FROM SYS_USER
+    </sql>
+    <!-- 添加用户信息 -->
+    <insert id="addSysUserInfo" parameterType="java.util.Map">
+        INSERT INTO SYS_USER (
+            `dept_id`,
+            `login_name`,
+            `user_name`,
+            `user_type`,
+            `email`,
+            `phonenumber`,
+            `sex`,
+            `avatar`,
+            `password`,
+            `salt`,
+            `status`,
+            `del_flag`,
+            `login_ip`,
+            `login_date`,
+            `create_by`,
+            `create_time`,
+            `update_by`,
+            `update_time`,
+            `remark`
+        )
+        VALUES
+            (
+              #{deptId},
+              #{loginName},
+              #{userName},
+              #{userType},
+              #{email},
+              #{phone},
+              #{sex},
+              #{avatar},
+              #{password},
+              #{salt},
+              #{status},
+              #{delFlag},
+              #{login_ip},
+              sysdate(),
+              #{create_by},
+              sysdate(),
+              #{update_by},
+              sysdate(),
+              #{remark}
+            )
+    </insert>
+    <!-- 编辑用户信息 -->
+    <update id="editSysUserInfo" parameterType="java.util.Map">
+        UPDATE SYS_USER
+        SET
+         `dept_id` = #{deptId},
+         `login_name` = #{loginName},
+         `user_name` = #{userName},
+         `user_type` = #{userType},
+         `email` = #{email},
+         `phonenumber` = #{phone},
+         `sex` = #{sex},
+         `avatar` = #{avatar},
+         `password` = #{password},
+         `salt` = #{salt},
+         `status` = #{status},
+         `del_flag` = #{delFlag},
+         `login_ip` = #{login_ip},
+         `create_by` = #{create_by},
+         `update_by` = #{update_by},
+         `update_time` = sysdate(),
+         `remark` = #{remark}
+        WHERE 1=1
+            AND `user_id` = #{userId}
+    </update>
+    <!-- 删除用户信息 -->
+    <delete id="delSysUser" parameterType="java.util.List">
+        DELETE FROM SYS_USER WHERE USER_ID IN
+        <foreach collection="idList" item="item"
+                 open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+    <!-- 用户信息分页查询 -->
+	<select id="sysUserInfoList" parameterType="java.util.Map" resultMap="SysUserResult">
+		<include refid="selectSysUser"/>
+		WHERE 1=1 LIMIT #{start},#{end}
+	</select>
+    <!-- 查询用户总条数 -->
+    <select id="sysUserAllCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM SYS_USER
+    </select>
+</mapper> 
