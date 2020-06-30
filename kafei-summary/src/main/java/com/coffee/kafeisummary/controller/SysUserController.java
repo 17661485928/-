@@ -41,7 +41,18 @@ public class SysUserController {
         String page = request.getParameter("page");
         //每页中数据的条数
         String limit = request.getParameter("limit");
-        Map<String, Object> dataMap = sysUserService.sysUserInfoList(page, limit);
+        String loginName = request.getParameter("loginName");
+        String userName = request.getParameter("userName");
+        String phone = request.getParameter("phone");
+        String status = request.getParameter("status");
+        String delFlag = request.getParameter("delFlag");
+        Map<String, Object> requestMaps = new HashMap<>(20);
+        requestMaps.put("loginName",loginName);
+        requestMaps.put("userName",userName);
+        requestMaps.put("phone",phone);
+        requestMaps.put("status",status);
+        requestMaps.put("delFlag",delFlag);
+        Map<String, Object> dataMap = sysUserService.sysUserInfoList(page, limit,requestMaps);
         return JSONObject.toJSONString(dataMap);
     }
 

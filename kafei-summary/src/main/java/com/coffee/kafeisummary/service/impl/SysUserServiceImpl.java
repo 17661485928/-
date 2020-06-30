@@ -36,15 +36,14 @@ public class SysUserServiceImpl implements SysUserService {
      * @return
      */
     @Override
-    public Map<String, Object> sysUserInfoList(String page, String limit) {
-        Map<String, Object> requestParam = new HashMap<>(4);
+    public Map<String, Object> sysUserInfoList(String page, String limit,Map<String, Object> requestMaps) {
         //开始查询位置
         Integer start = (Integer.parseInt(page) - 1) * Integer.parseInt(limit);
-        requestParam.put("start", start);
+        requestMaps.put("start", start);
         //结束位置
-        requestParam.put("end", Integer.valueOf(limit));
-        List<SysUserPojo> sysUserPojoList = sysUserDao.sysUserInfoList(requestParam);
-        Integer sysUserAllCount = sysUserDao.sysUserAllCount(requestParam);
+        requestMaps.put("end", Integer.valueOf(limit));
+        List<SysUserPojo> sysUserPojoList = sysUserDao.sysUserInfoList(requestMaps);
+        Integer sysUserAllCount = sysUserDao.sysUserAllCount(requestMaps);
         Map<String, Object> responseMap = new HashMap<>(4);
         responseMap.put("code", 0);
         responseMap.put("msg", "");

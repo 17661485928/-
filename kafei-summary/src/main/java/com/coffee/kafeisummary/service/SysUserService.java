@@ -18,7 +18,7 @@ public interface SysUserService {
      * @param limit
      * @return
      */
-    Map<String, Object> sysUserInfoList(String page, String limit);
+    Map<String, Object> sysUserInfoList(String page, String limit,Map<String, Object> requestMaps);
 
     /**
      * 删除用户信息

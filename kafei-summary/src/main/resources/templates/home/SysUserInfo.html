@@ -6,6 +6,74 @@
     <link rel="stylesheet" href="/static/layui/css/layui.css">
 </head>
 <body>
+<div class="layui-row" id="sousuodiv" style="display:none;">
+    <form class="layui-form layui-from-pane" action="#" style="margin-top:20px;text-align:center">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">登录账户：</label>
+                <div class="layui-input-inline">
+                    <input type="tel" id="lname" name="lname" placeholder="请输入登录账户"
+                           autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">用户昵称：</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="uname" name="uname" placeholder="请输入用户昵称"
+                           autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">手机号：</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="uphone" name="uphone" placeholder="请输入手机号"
+                           autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">帐号状态：</label>
+                <div class="layui-input-inline">
+                    <select name="ustatus" id="ustatus" lay-filter="statusSelect">
+                        <option value=""></option>
+                        <option value="0">正常</option>
+                        <option value="1">停用</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">删除标志：</label>
+                <div class="layui-input-inline">
+                    <select name="udelFlag" id="udelFlag" lay-filter="delSelect">
+                        <option value=""></option>
+                        <option value="0">存在</option>
+                        <option value="1">删除</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">as：</label>
+                <div class="layui-input-inline">
+                    <select name="delFlag" id="udel1Flag" lay-filter="delSelect">
+                        <option value=""></option>
+                        <option value="0">存在</option>
+                        <option value="1">删除</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item" style="text-align:center">
+            <div class="layui-inline">
+                <button type="reset" id="formReset" class="layui-btn layui-btn-primary">重置</button>
+                <button class="layui-btn" id="searchEmailCompany" data-type="reload">
+                    <i class="layui-icon">&#xe615;</i>搜索
+                </button>
+            </div>
+        </div>
+    </form>
+
+</div>
 <table id="userTable" class="layui-hide" lay-filter="userTable"></table>
 <!--//这里是弹出层的表单信息
 //表单的id用于表单的选择，style是在本页隐藏，只有点击编辑才会弹出-->
@@ -115,6 +183,7 @@
         <button class="layui-btn layui-btn-sm" lay-event="addSysUser">添加用户信息</button>
         <button class="layui-btn layui-btn-sm" lay-event="editSysUser">编辑用户信息</button>
         <button class="layui-btn layui-btn-sm" lay-event="delSysUser">删除用户信息</button>
+        <button class="layui-btn layui-btn-sm" lay-event="sousuo"><i class="layui-icon">&#xe615;</i></button>
     </div>
 </script>
 <script src="/static/layui/layui.all.js"></script>
@@ -123,26 +192,33 @@
 </script>
 <script>
     layui.use(['form', 'layer', 'table', 'jquery'], function () {
-        var form = layui.form
-            , layer = layui.layer
-            , $ = layui.jquery,
+        var form = layui.form,
+            element = layui.element,
+            $ = layui.jquery
+            , layer = layui.layer,
             util = layui.util,
             table = layui.table;
-
         //第一个实例
         var sysUserT = table.render({
-            elem: '#userTable'
+            elem: '#userTable',
+            skin: 'line' //行边框风格
             , id: 'userTable'
             , height: 525
             //,width:1130
-            , url: '/SysUserController/sysUserInfoList' //数据接口
+            , url: '/SysUserController/sysUserInfoList?active' //数据接口
             //,toolbar: '#roletoolbar' //开启头部工具栏，并为其绑定左侧模板
-            , page: true //开启分页
+            , page: { //分页设定
+                layout: ['prev', 'page', 'next', 'count'] //自定义分页布局
+                , curr: 1 //设定初始在第 1 页
+                , limit: 8//每页多少数据
+                , groups: 5 //只显示 5 个连续页码
+            } //开启分页
             , theme: '#1E9FFF'
             , toolbar: '#toolbarDemo' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
             , totalRow: true //开启合计行
-            , limit: 10   //默认十条数据一页
-            , limits: [10, 20, 30, 50]  //数据分页条
+            // , limit: 10   //默认十条数据一页
+            // , limits: [10, 20, 30, 50]  //数据分页条
+
             //templet:'#zizeng'
             , cols: [
                 [ //表头
@@ -224,11 +300,48 @@
                 ]
             ]
         });
+        var active = {
+            reload: function () {
+                //执行重载
+                table.reload('userTable', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    , where: {
+                        loginName: $("#lname").val(),
+                        userName: $("#uname").val(),
+                        phone: $("#uphone").val(),
+                        status:$('select[name=ustatus]').val(),
+                        delFlag:$('select[name=udelFlag]').val()
+                    }
+                });
+
+            }
+        };
+
+        $('#searchEmailCompany').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+            return false;
+        });
+        /*$("#formReset").on('click',function () {
+            sysUserT.reload("{}");
+        });*/
         //头工具栏事件
         table.on('toolbar(userTable)', function (obj) {
             var checkStatus = table.checkStatus(obj.config.id);
             var data = checkStatus.data;
             switch (obj.event) {
+                case 'sousuo':
+
+                    var dis = $("#sousuodiv").css("display");
+                    if('none'=== dis){
+                        $("#sousuodiv").show();
+                    } else {
+                        $("#sousuodiv").hide();
+                    }
+                    console.log(dis)
+                    break;
                 case 'addSysUser':
                     layer.open({
                         //layer提供了5种层类型。可传入的值有：0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
@@ -391,6 +504,7 @@
             }
         });
     });
+
 </script>
 
 </body>

@@ -111,10 +111,36 @@
     <!-- 用户信息分页查询 -->
 	<select id="sysUserInfoList" parameterType="java.util.Map" resultMap="SysUserResult">
 		<include refid="selectSysUser"/>
-		WHERE 1=1 LIMIT #{start},#{end}
+		WHERE 1=1
+        <if test="loginName != null and loginName != ''">
+            AND login_name LIKE CONCAT(CONCAT('%', #{loginName}), '%')
+        </if>
+        <if test="userName != null and userName != ''">
+            AND user_name LIKE CONCAT(CONCAT('%', #{userName}), '%')
+        </if>
+        <if test="phone != null and phone != ''">
+            AND phone=#{phone}
+        </if>
+        <if test="status != null and status != ''">
+            AND status=#{status}
+        </if>
+        <if test="delFlag != null and delFlag != ''">
+            AND del_flag=#{delFlag}
+        </if>
+		LIMIT #{start},#{end}
 	</select>
     <!-- 查询用户总条数 -->
     <select id="sysUserAllCount" parameterType="java.util.Map" resultType="java.lang.Integer">
         SELECT COUNT(1) FROM SYS_USER
+        WHERE 1=1
+        <if test="loginName != null and loginName != ''">
+            AND login_name LIKE CONCAT(CONCAT('%', #{loginName}), '%')
+        </if>
+        <if test="userName != null and userName != ''">
+            AND user_name LIKE CONCAT(CONCAT('%', #{userName}), '%')
+        </if>
+        <if test="phone != null and phone != ''">
+            AND phone=#{phone}
+        </if>
     </select>
 </mapper> 
