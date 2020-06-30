@@ -32,7 +32,7 @@
     </sql>
 	<select id="login" resultMap="SysUserResult">
 		<include refid="selectSysUser"/>
-		WHERE login_name=#{username}
+		WHERE login_name=#{username} AND del_flag='0' AND status='0'
 	</select>
 
 </mapper> 

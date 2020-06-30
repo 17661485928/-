@@ -38,7 +38,7 @@ public class PageJumpController {
         String avatar = request.getParameter("avatar");
         mvn.addObject("loginname",loginname);
         mvn.addObject("avatar", URLEncoder.encode(avatar,"utf-8"));
-        mvn.setViewName("index1");
+        mvn.setViewName("index");
         return mvn;
     }
     /**
@@ -56,5 +56,29 @@ public class PageJumpController {
     @RequestMapping(value = "/sysUserInfo")
     public String sysUserInfo(){
         return "home/SysUserInfo";
+    }
+    /**
+     * 每日计划页面
+     * @return
+     */
+    @RequestMapping(value = "/DailyPlan")
+    public String DailyPlan(){
+        return "plan/DailyPlan";
+    }
+    /**
+     * 每月计划页面
+     * @return
+     */
+    @RequestMapping(value = "/MonthlyPlan")
+    public String MonthlyPlan(){
+        return "plan/MonthlyPlan";
+    }
+    /**
+     * 计划ALL页面
+     * @return
+     */
+    @RequestMapping(value = "/PlanAll")
+    public String PlanAll(){
+        return "plan/PlanAll";
     }
 }

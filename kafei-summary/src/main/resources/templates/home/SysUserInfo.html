@@ -10,7 +10,7 @@
 <!--//这里是弹出层的表单信息
 //表单的id用于表单的选择，style是在本页隐藏，只有点击编辑才会弹出-->
 <div class="layui-row" id="sysUserFrom" style="display:none;">
-    <form class="layui-form layui-from-pane" action="" style="margin-top:20px">
+    <form class="layui-form layui-from-pane" id="myform" action="" style="margin-top:20px">
         <input type="text" name="userId" id="userId" autocomplete="off" style="display: none" class="layui-input">
         <input type="text" name="deptId" id="deptId" autocomplete="off" style="display: none" class="layui-input">
         <div class="layui-form-item">
@@ -104,7 +104,7 @@
             <div class="layui-inline">
                 <label class="layui-form-label">备注：</label>
                 <div class="layui-input-block">
-                        <textarea placeholder="请输入内容" id = "remark" class="layui-textarea"></textarea>
+                    <textarea placeholder="请输入内容" id="remark" class="layui-textarea"></textarea>
                 </div>
             </div>
         </div>
@@ -258,17 +258,20 @@
                                 url: '/SysUserController/addSysUserInfo',
                                 type: 'POST',
                                 dataType: 'json',
-                                data: {deptId: deptId, loginName: loginName,
-                                    userName:userName,phone:phone,email:email,userType:userType,
-                                    avatar:avatar,password:password,salt:salt,sex:sex,status:status,
-                                    delFlag:delFlag,remark:remark
+                                data: {
+                                    deptId: deptId, loginName: loginName,
+                                    userName: userName, phone: phone, email: email, userType: userType,
+                                    avatar: avatar, password: password, salt: salt, sex: sex, status: status,
+                                    delFlag: delFlag, remark: remark
                                 },
                                 success: function (msg) {
                                     var code = msg.code;
                                     if (code === 200) {
+                                        $('#myform')[0].reset();
                                         layer.msg(msg.msg, {icon: 6});
                                         layer.closeAll();
                                         sysUserT.reload();    //编辑之后,刷新表格
+                                        form.render();
                                     } else {
                                         layer.msg(msg.msg, {icon: 5});
                                     }
@@ -306,12 +309,12 @@
                     break;
                 case 'editSysUser':
                     var dataSize = data.length;
-                    if(dataSize<1){
+                    if (dataSize < 1) {
                         layer.msg("请选择一条需要编辑的数据！");
-                        return ;
-                    } else if (dataSize>1){
+                        return;
+                    } else if (dataSize > 1) {
                         layer.msg("只能选择一条需要编辑的数据！");
-                        return ;
+                        return;
                     }
                     layer.open({
                         //layer提供了5种层类型。可传入的值有：0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
@@ -361,10 +364,11 @@
                                 url: '/SysUserController/editSysUserInfo',
                                 type: 'POST',
                                 dataType: 'json',
-                                data: {userId: userId, deptId: deptId, loginName: loginName,
-                                    userName:userName,phone:phone,email:email,userType:userType,
-                                    avatar:avatar,password:password,salt:salt,sex:sex,status:status,
-                                    delFlag:delFlag,remark:remark
+                                data: {
+                                    userId: userId, deptId: deptId, loginName: loginName,
+                                    userName: userName, phone: phone, email: email, userType: userType,
+                                    avatar: avatar, password: password, salt: salt, sex: sex, status: status,
+                                    delFlag: delFlag, remark: remark
                                 },
                                 success: function (msg) {
                                     var code = msg.code;
