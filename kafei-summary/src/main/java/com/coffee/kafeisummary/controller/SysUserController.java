@@ -4,13 +4,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.coffee.kafeisummary.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,6 +24,7 @@ public class SysUserController {
 
     @Autowired
     private SysUserService sysUserService;
+
 
     /**
      * 用户信息列表查询
@@ -47,12 +45,12 @@ public class SysUserController {
         String status = request.getParameter("status");
         String delFlag = request.getParameter("delFlag");
         Map<String, Object> requestMaps = new HashMap<>(20);
-        requestMaps.put("loginName",loginName);
-        requestMaps.put("userName",userName);
-        requestMaps.put("phone",phone);
-        requestMaps.put("status",status);
-        requestMaps.put("delFlag",delFlag);
-        Map<String, Object> dataMap = sysUserService.sysUserInfoList(page, limit,requestMaps);
+        requestMaps.put("loginName", loginName);
+        requestMaps.put("userName", userName);
+        requestMaps.put("phone", phone);
+        requestMaps.put("status", status);
+        requestMaps.put("delFlag", delFlag);
+        Map<String, Object> dataMap = sysUserService.sysUserInfoList(page, limit, requestMaps);
         return JSONObject.toJSONString(dataMap);
     }
 
@@ -95,7 +93,7 @@ public class SysUserController {
         String remark = request.getParameter("remark");
         Map<String, Object> requestMaps = new HashMap<>(20);
         requestMaps.put("userId", userId);
-        requestMaps.put("deptId", deptId);
+        requestMaps.put("deptId", "".equals(deptId) ? null : deptId);
         requestMaps.put("loginName", loginName);
         requestMaps.put("userName", userName);
         requestMaps.put("phone", phone);
@@ -162,6 +160,24 @@ public class SysUserController {
     @ResponseBody
     public String uploadAvatarIcon(HttpServletRequest request) {
         Map<String, Object> dataMap = sysUserService.uploadAvatarIcon(request);
+        return JSONObject.toJSONString(dataMap);
+    }
+
+    /**
+     * 新增、修改用户时（点击取消操作，发送消息）
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/canceluploadAvatarIcon")
+    @ResponseBody
+    public String canceluploadAvatarIcon(HttpServletRequest request) {
+        String filePtah = request.getParameter("filePtah");
+        String path = request.getParameter("path");
+        if("".equals(path)){
+            return null;
+        }
+        Map<String, Object> dataMap = sysUserService.canceluploadAvatarIcon(path);
         return JSONObject.toJSONString(dataMap);
     }
 }

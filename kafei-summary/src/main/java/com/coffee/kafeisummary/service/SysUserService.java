@@ -47,4 +47,6 @@ public interface SysUserService {
      * @return
      */
     Map<String, Object> uploadAvatarIcon(HttpServletRequest request);
+
+    Map<String, Object> canceluploadAvatarIcon(String filePtah);
 }

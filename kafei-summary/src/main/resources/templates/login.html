@@ -113,7 +113,7 @@
                     if (code == 200) {
                         var loginname = msg.data.login_name;
                         var avatar = msg.data.avatar;
-                        location.replace("/PageJumpController/index?loginname="+loginname+"&avatar="+avatar);
+                        location.replace("/PageJumpController/index?loginname="+encodeURIComponent(loginname)+"&avatar="+encodeURIComponent(avatar));
                     } else {
                         confirm(msg.msg)
                     }

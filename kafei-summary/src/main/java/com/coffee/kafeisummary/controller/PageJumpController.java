@@ -36,8 +36,8 @@ public class PageJumpController {
         ModelAndView mvn = new ModelAndView();
         String loginname = request.getParameter("loginname");
         String avatar = request.getParameter("avatar");
-        mvn.addObject("loginname",loginname);
-        mvn.addObject("avatar", URLEncoder.encode(avatar,"utf-8"));
+        mvn.addObject("loginname",URLEncoder.encode(loginname,"UTF-8"));
+        mvn.addObject("avatar", URLEncoder.encode(avatar,"UTF-8"));
         mvn.setViewName("index");
         return mvn;
     }

@@ -81,6 +81,7 @@
     <form class="layui-form layui-from-pane" id="myform" action="" style="margin-top:20px">
         <input type="text" name="userId" id="userId" autocomplete="off" style="display: none" class="layui-input">
         <input type="text" name="deptId" id="deptId" autocomplete="off" style="display: none" class="layui-input">
+        <input type="text" name="path" id="path" autocomplete="off" style="display: none" class="layui-input">
         <div class="layui-form-item">
             <div class="layui-inline">
                 <label class="layui-form-label">登录账户：</label>
@@ -146,10 +147,20 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">性别：</label>
-            <div class="layui-input-inline">
-                <input type="radio" name="sex" value="0" title="男" checked>
-                <input type="radio" name="sex" value="1" title="女">
+            <div class="layui-inline">
+                <label class="layui-form-label">性别：</label>
+                <div class="layui-input-inline">
+                    <input type="radio" name="sex" value="0" title="男" checked>
+                    <input type="radio" name="sex" value="1" title="女">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">头像上传：</label>
+                <div class="layui-input-inline layui-upload">
+                    <button type="button" class="layui-btn" id="uploadId">上传图片</button>
+                    <img class="layui-upload-img" id="imgIdA" style="width:35%;height:40%;">
+                    <p id="demoText"></p>
+                </div>
             </div>
         </div>
         <div class="layui-form-item">
@@ -193,8 +204,9 @@
 <script>
     layui.use(['form', 'layer', 'table', 'jquery'], function () {
         var form = layui.form,
-            element = layui.element,
-            $ = layui.jquery
+            element = layui.element
+            , upload = layui.upload
+            , $ = layui.jquery
             , layer = layui.layer,
             util = layui.util,
             table = layui.table;
@@ -311,8 +323,8 @@
                         loginName: $("#lname").val(),
                         userName: $("#uname").val(),
                         phone: $("#uphone").val(),
-                        status:$('select[name=ustatus]').val(),
-                        delFlag:$('select[name=udelFlag]').val()
+                        status: $('select[name=ustatus]').val(),
+                        delFlag: $('select[name=udelFlag]').val()
                     }
                 });
 
@@ -324,9 +336,36 @@
             active[type] ? active[type].call(this) : '';
             return false;
         });
-        /*$("#formReset").on('click',function () {
-            sysUserT.reload("{}");
-        });*/
+        //普通图片上传
+        var uploadInst = upload.render({
+            elem: '#uploadId'
+            , url: '/SysUserController/uploadAvatarIcon' //改成您自己的上传接口
+            , before: function (obj) {
+                //预读本地文件示例，不支持ie8
+                obj.preview(function (index, file, result) {
+                    console.log("result:" + result);
+                    $('#imgIdA').attr('src', result); //图片链接（base64）
+                });
+            }
+            , done: function (res) {
+                //如果上传失败
+                if (res.code !== 200) {
+                    return layer.msg('上传失败');
+                }
+                var path = res.filePath;
+                var path1 = res.path;
+                $('#avatar').val(path);
+                $('#path').val(path1);
+            }
+            , error: function () {
+                //演示失败状态，并实现重传
+                var demoText = $('#demoText');
+                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                demoText.find('.demo-reload').on('click', function () {
+                    uploadInst.upload();
+                });
+            }
+        });
         //头工具栏事件
         table.on('toolbar(userTable)', function (obj) {
             var checkStatus = table.checkStatus(obj.config.id);
@@ -335,12 +374,11 @@
                 case 'sousuo':
 
                     var dis = $("#sousuodiv").css("display");
-                    if('none'=== dis){
+                    if ('none' === dis) {
                         $("#sousuodiv").show();
                     } else {
                         $("#sousuodiv").hide();
                     }
-                    console.log(dis)
                     break;
                 case 'addSysUser':
                     layer.open({
@@ -388,6 +426,16 @@
                                     } else {
                                         layer.msg(msg.msg, {icon: 5});
                                     }
+                                }
+                            });
+                        }
+                        ,btn2:function (index, layero) {
+                            $.ajax({
+                                url: '/SysUserController/canceluploadAvatarIcon',
+                                type: 'POST',
+                                dataType: 'json',
+                                data: {
+                                    path: $('#path').val(),filePath:$('#avatar').val()
                                 }
                             });
                         }
@@ -448,6 +496,7 @@
                             $('#email').val(data[0].email);
                             $('#userType').val(data[0].user_type);
                             $('#avatar').val(data[0].avatar);
+                            $('#imgIdA').attr('src', data[0].avatar);
                             $('#password').val(data[0].password);
                             $('#salt').val(data[0].salt);
                             $("input[name=sex][value='0']").attr("checked", data[0].sex == 0 ? true : false);
@@ -492,6 +541,15 @@
                                     } else {
                                         layer.msg(msg.msg, {icon: 5});
                                     }
+                                }
+                            });
+                        },btn2:function (index, layero) {
+                            $.ajax({
+                                url: '/SysUserController/canceluploadAvatarIcon',
+                                type: 'POST',
+                                dataType: 'json',
+                                data: {
+                                    path: $('#path').val(),filePath:$('#avatar').val()
                                 }
                             });
                         }

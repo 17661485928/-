@@ -3,6 +3,7 @@ package com.coffee.kafeisummary.service.impl;
 import com.coffee.kafeisummary.dao.SysUserDao;
 import com.coffee.kafeisummary.pojo.SysUserPojo;
 import com.coffee.kafeisummary.service.SysUserService;
+import com.coffee.kafeisummary.topic.TopicSender;
 import com.coffee.kafeisummary.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,8 @@ public class SysUserServiceImpl implements SysUserService {
 
     @Autowired
     private SysUserDao sysUserDao;
-
+    @Autowired
+    TopicSender topicSender;
     /**
      * 用户信息列表查询接口实现方法
      *
@@ -158,22 +160,19 @@ public class SysUserServiceImpl implements SysUserService {
                             System.out.println(resourceBasePath);
                             //获取文件保存路径
                             String avatarPath = "\\src\\main\\resources\\static\\avatar\\";
-                            String targetPath = "\\target\\classes\\static\\avatar\\";
                             File fileDir = new File(resourceBasePath + avatarPath);
-                            File targetFile = new File(resourceBasePath + targetPath);
                             //如果不存在 则创建
                             if (!fileDir.exists()) {
                                 fileDir.mkdirs();
                             }
                             String path = resourceBasePath + avatarPath + fileName;
-                            String path1 = resourceBasePath + targetPath + fileName;
                             //存文件
                             File localFile = new File(path);
-                            File localFile1 = new File(path1);
                             file.transferTo(localFile);
                             responseMap.put("code", 200);
                             responseMap.put("msg", "上传成功！");
                             responseMap.put("filePath", "\\static\\avatar\\"+fileName);
+                            responseMap.put("path", path);
                         } catch (IllegalStateException | IOException e) {
                             // TODO Auto-generated catch block
                             e.printStackTrace();
@@ -192,5 +191,11 @@ public class SysUserServiceImpl implements SysUserService {
             responseMap.put("msg", "上传失败！");
         }
         return responseMap;
+    }
+
+    @Override
+    public Map<String, Object> canceluploadAvatarIcon(String filePtah) {
+        topicSender.sendAvatar("".equals(filePtah)?"0":filePtah);
+        return null;
     }
 }

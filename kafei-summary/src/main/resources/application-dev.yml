@@ -51,3 +51,9 @@ spring:
         wall:
           config:
             multi-statement-allow: true
+  rabbitmq:
+    addresses: 127.0.0.1
+    port: 5672
+    username: admin
+    password: admin
+    virtual-host: /admin
