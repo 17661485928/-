@@ -36,9 +36,11 @@ public class PageJumpController {
         ModelAndView mvn = new ModelAndView();
         String loginname = request.getParameter("loginname");
         String avatar = request.getParameter("avatar");
+        String userId = request.getParameter("userId");
         mvn.addObject("loginname",URLEncoder.encode(loginname,"UTF-8"));
         mvn.addObject("avatar", URLEncoder.encode(avatar,"UTF-8"));
-        mvn.setViewName("index");
+        mvn.addObject("userId", URLEncoder.encode(userId,"UTF-8"));
+        mvn.setViewName("index1");
         return mvn;
     }
     /**
@@ -80,5 +82,13 @@ public class PageJumpController {
     @RequestMapping(value = "/PlanAll")
     public String PlanAll(){
         return "plan/PlanAll";
+    }
+    /**
+     * 计划ALL页面
+     * @return
+     */
+    @RequestMapping(value = "/BasicData")
+    public String BasicData(){
+        return "home/BasicData";
     }
 }

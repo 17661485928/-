@@ -180,4 +180,17 @@ public class SysUserController {
         Map<String, Object> dataMap = sysUserService.canceluploadAvatarIcon(path);
         return JSONObject.toJSONString(dataMap);
     }
+    /**
+     * 根据用户id查询用户信息
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/getSysUserInfoById")
+    @ResponseBody
+    public String getSysUserInfoById(HttpServletRequest request) {
+        String userId = request.getParameter("userId");
+        Map<String, Object> dataMap = sysUserService.getSysUserInfoById(userId);
+        return JSONObject.toJSONString(dataMap);
+    }
 }

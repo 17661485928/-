@@ -142,5 +142,17 @@
         <if test="phone != null and phone != ''">
             AND phone=#{phone}
         </if>
+        <if test="status != null and status != ''">
+            AND status=#{status}
+        </if>
+        <if test="delFlag != null and delFlag != ''">
+            AND del_flag=#{delFlag}
+        </if>
+    </select>
+    <!-- 根据用户id查询用户信息 -->
+    <select id="getSysUserInfoById" resultMap="SysUserResult">
+        <include refid="selectSysUser"/>
+        WHERE 1=1
+        AND user_id=#{userId}
     </select>
 </mapper> 

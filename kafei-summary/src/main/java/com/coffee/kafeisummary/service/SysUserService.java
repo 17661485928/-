@@ -49,4 +49,11 @@ public interface SysUserService {
     Map<String, Object> uploadAvatarIcon(HttpServletRequest request);
 
     Map<String, Object> canceluploadAvatarIcon(String filePtah);
+
+    /**
+     * 根据用户id查询用户信息
+     * @param userId
+     * @return
+     */
+    Map<String, Object> getSysUserInfoById(String userId);
 }

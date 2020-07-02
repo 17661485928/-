@@ -51,4 +51,11 @@ public interface SysUserDao {
      * @return
      */
     Integer addSysUserInfo(Map<String, Object> requestMaps);
+
+    /**
+     * 根据用户id查询用户信息
+     * @param requestMaps
+     * @return
+     */
+    SysUserPojo getSysUserInfoById(Map<String, Object> requestMaps);
 }

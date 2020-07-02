@@ -22,7 +22,7 @@
                 </a>
                 <dl class="layui-nav-child">
                     <dd>
-                        <a href="">基本资料</a>
+                        <a href="/PageJumpController/BasicData">基本资料</a>
                     </dd>
                     <dd>
                         <a href="">安全设置</a>
@@ -40,21 +40,21 @@
             <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
             <ul class="layui-nav layui-nav-tree leftMain" lay-filter="test">
                 <li class="layui-nav-item layui-nav-itemed">
-                    <a class="" href="javascript:;">咖啡の用户</a>
+                    <a class="" href="javascript:;"><i class="layui-icon">&#xe770;</i>用户</a>
                     <dl class="layui-nav-child">
                         <dd class="layui-this">
-                            <a href="/PageJumpController/sysUserInfo"><i class="layui-icon">&#xe770;</i>咖啡の用户</a>
+                            <a href="/PageJumpController/sysUserInfo">咖啡の用户</a>
                         </dd>
                         <dd>
-                            <a href="/roleInfo"><i class="layui-icon">&#xe613;</i>咖啡の角色</a>
+                            <a href="/roleInfo">咖啡の角色</a>
                         </dd>
                         <dd>
-                            <a href="/permInfo"><i class="layui-icon">&#xe613;</i>咖啡の权限</a>
+                            <a href="/permInfo">咖啡の权限</a>
                         </dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item">
-                    <a href="javascript:;">咖啡の计划</a>
+                    <a href="javascript:;"><i class="layui-icon">&#xe6b2;</i>咖啡の计划</a>
                     <dl class="layui-nav-child">
                         <dd>
                             <a href="/PageJumpController/DailyPlan"><i class="layui-icon">&#xe612;</i>每日の计划</a>
@@ -116,8 +116,19 @@
                 var href = $(this).attr('href');
                 var iframe = $('#rightMain').attr("src", href);
             });
+            var userId = getQueryVariable('userId');
+            $('.layui-layout-right a').on("click", function (e) {
+                e.preventDefault();
+                var href = $(this).attr('href');
+                if("/"!==href){
+                var iframe = $('#rightMain').attr("src", href+"?userId="+userId);
+                } else {
+                    window.location.href="http://localhost/";
+                }
+            });
             var login = getQueryVariable('loginname');
             var avatar = getQueryVariable('avatar');
+
             $("#b").html(login);
             $("#imgId").attr('src',avatar);
         });

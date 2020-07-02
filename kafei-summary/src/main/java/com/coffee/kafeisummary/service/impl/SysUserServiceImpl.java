@@ -198,4 +198,26 @@ public class SysUserServiceImpl implements SysUserService {
         topicSender.sendAvatar("".equals(filePtah)?"0":filePtah);
         return null;
     }
+
+    /**
+     * 根据用户id查询用户信息
+     * @param userId
+     * @return
+     */
+    @Override
+    public Map<String, Object> getSysUserInfoById(String userId) {
+        Map<String, Object> responseMap = new HashMap<>();
+        Map<String, Object> requestMaps = new HashMap<>();
+        requestMaps.put("userId", userId);
+        SysUserPojo sysUserPojo = sysUserDao.getSysUserInfoById(requestMaps);
+        if (sysUserPojo != null) {
+            responseMap.put("code", 200);
+            responseMap.put("msg", "成功！");
+            responseMap.put("data", sysUserPojo);
+        } else {
+            responseMap.put("code", 201);
+            responseMap.put("msg", "失败！");
+        }
+        return responseMap;
+    }
 }
