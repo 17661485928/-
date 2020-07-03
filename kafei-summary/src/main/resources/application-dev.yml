@@ -57,3 +57,7 @@ spring:
     username: admin
     password: admin
     virtual-host: /admin
+zookeeper:
+  address: 192.168.146.128:2181
+  timeout: 4000
+

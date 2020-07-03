@@ -40,7 +40,7 @@ public class PageJumpController {
         mvn.addObject("loginname",URLEncoder.encode(loginname,"UTF-8"));
         mvn.addObject("avatar", URLEncoder.encode(avatar,"UTF-8"));
         mvn.addObject("userId", URLEncoder.encode(userId,"UTF-8"));
-        mvn.setViewName("index1");
+        mvn.setViewName("index");
         return mvn;
     }
     /**
@@ -84,11 +84,19 @@ public class PageJumpController {
         return "plan/PlanAll";
     }
     /**
-     * 计划ALL页面
+     * 基础资料页面
      * @return
      */
     @RequestMapping(value = "/BasicData")
     public String BasicData(){
         return "home/BasicData";
+    }
+    /**
+     * 视频页面
+     * @return
+     */
+    @RequestMapping(value = "/LayuiVideo")
+    public String LayuiVideo(){
+        return "home/LayuiVideo";
     }
 }
