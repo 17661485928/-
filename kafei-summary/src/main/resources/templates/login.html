@@ -111,11 +111,8 @@
                 success: function (msg) {
                     var code = msg.code;
                     if (code == 200) {
-                        var loginname = msg.data.login_name;
-                        var username = msg.data.user_name;
-                        var avatar = msg.data.avatar;
                         var userId = msg.data.user_id;
-                        location.replace("/PageJumpController/index?loginname="+encodeURIComponent(username)+"&avatar="+encodeURIComponent(avatar)+"&userId="+encodeURIComponent(userId));
+                        location.replace("/PageJumpController/index?userId="+encodeURIComponent(userId));
                     } else {
                         confirm(msg.msg)
                     }

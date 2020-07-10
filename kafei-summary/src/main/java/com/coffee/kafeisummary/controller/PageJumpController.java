@@ -32,15 +32,9 @@ public class PageJumpController {
      * @return
      */
     @RequestMapping(value = "/index")
-    public ModelAndView index(HttpServletRequest request) throws UnsupportedEncodingException {
+    public ModelAndView index(HttpServletRequest request){
         ModelAndView mvn = new ModelAndView();
-        String loginname = request.getParameter("loginname");
-        String avatar = request.getParameter("avatar");
-        String userId = request.getParameter("userId");
-        mvn.addObject("loginname",URLEncoder.encode(loginname,"UTF-8"));
-        mvn.addObject("avatar", URLEncoder.encode(avatar,"UTF-8"));
-        mvn.addObject("userId", URLEncoder.encode(userId,"UTF-8"));
-        mvn.setViewName("index");
+        mvn.setViewName("index1");
         return mvn;
     }
     /**
@@ -98,5 +92,13 @@ public class PageJumpController {
     @RequestMapping(value = "/LayuiVideo")
     public String LayuiVideo(){
         return "home/LayuiVideo";
+    }
+    /**
+     * 上传页面
+     * @return
+     */
+    @RequestMapping(value = "/SysUpload")
+    public String SysUpload(HttpServletRequest request){
+        return "home/SysUpload";
     }
 }

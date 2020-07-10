@@ -172,7 +172,6 @@ public class SysUserController {
     @RequestMapping(value = "/canceluploadAvatarIcon")
     @ResponseBody
     public String canceluploadAvatarIcon(HttpServletRequest request) {
-        String filePtah = request.getParameter("filePtah");
         String path = request.getParameter("path");
         if("".equals(path)){
             return null;

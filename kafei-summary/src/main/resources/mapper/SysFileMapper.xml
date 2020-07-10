@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coffee.kafeisummary.dao.UploadDao">
+
+    <resultMap type="com.coffee.kafeisummary.pojo.SysFilePojo" id="SysFileResult">
+        <id property="id" column="id"/>
+        <result property="file_old_name" column="file_old_name"/>
+        <result property="file_new_name" column="file_new_name"/>
+        <result property="file_size" column="file_size"/>
+        <result property="file_suffix" column="file_suffix"/>
+        <result property="file_path" column="file_path"/>
+        <result property="create_time" column="create_time"/>
+        <result property="update_time" column="update_time"/>
+        <result property="status" column="status"/>
+        <result property="userId" column="userId"/>
+    </resultMap>
+    <sql id="selectSysFile">
+       SELECT `id`, `userId`,`file_old_name`, `file_new_name`, `file_size`, `file_suffix`, `file_path`, `create_time`, `update_time`, `status`
+       FROM SYS_FILE
+    </sql>
+    <insert id="insertFileInfo" parameterType="java.util.Map">
+        INSERT INTO `sys_file` (
+            `file_old_name`,
+            `file_new_name`,
+            `file_size`,
+            `file_suffix`,
+            `file_path`,
+            `create_time`,
+            `update_time`,
+            `status`,
+            `userId`
+        )
+        VALUES
+            (
+                #{file_old_name},
+                #{file_new_name},
+                #{file_size},
+                #{file_suffix},
+                #{file_path},
+                sysdate(),
+                sysdate(),
+                '0',
+                #{userId}
+            )
+    </insert>
+    <select id="selectSysFileInfo" parameterType="java.util.Map" resultMap="SysFileResult">
+        <include refid="selectSysFile"/>
+        WHERE 1=1
+        AND userId=#{userId} AND status='0'
+        <if test="avatar != null and avatar != ''">
+            AND file_path =#{avatar}
+        </if>
+    </select>
+
+</mapper> 

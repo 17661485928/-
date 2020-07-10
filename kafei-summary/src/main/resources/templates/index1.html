@@ -15,10 +15,14 @@
 <div class="layui-layout layui-layout-admin">
     <div class="layui-header">
         <div class="layui-logo">咖啡の后台</div>
+        <ul class="layui-nav layui-layout-left">
+            <li class="layui-nav-item"><a href="">控制台</a></li>
+            <span class="layui-nav-bar" style="left: 20px; top: 55px; width: 0px; opacity: 0;"></span>
+        </ul>
         <ul class="layui-nav layui-layout-right">
             <li class="layui-nav-item">
                 <a id="logina" href="javascript:;">
-                    <img id = "imgId" src="" class="layui-nav-img"> <span id="b"></span>
+                    <img id="imgId" src="" class="layui-nav-img"> <span id="b"></span>
                 </a>
                 <dl class="layui-nav-child">
                     <dd>
@@ -49,7 +53,7 @@
                             <a href="/PageJumpController/LayuiVideo">咖啡の视频</a>
                         </dd>
                         <dd>
-                            <a href="/permInfo">咖啡の权限</a>
+                            <a href="/PageJumpController/SysUpload">咖啡の上传</a>
                         </dd>
                     </dl>
                 </li>
@@ -111,28 +115,41 @@
 
         });
         $(document).ready(function () {
+            var userId = getQueryVariable('userId');
             $('.leftMain a').on("click", function (e) {
                 e.preventDefault();
                 var href = $(this).attr('href');
-                var iframe = $('#rightMain').attr("src", href);
+                var iframe = $('#rightMain').attr("src", href+"?userId=" + userId);
             });
-            var userId = getQueryVariable('userId');
             $('.layui-layout-right a').on("click", function (e) {
                 e.preventDefault();
                 var href = $(this).attr('href');
-                if("/"!==href){
-                var iframe = $('#rightMain').attr("src", href+"?userId="+userId);
+                if ("/" !== href) {
+                    var iframe = $('#rightMain').attr("src", href + "?userId=" + userId);
                 } else {
-                    window.location.href="http://localhost/";
+                    window.location.href = "http://localhost/";
                 }
             });
-            var login = getQueryVariable('loginname');
-            var avatar = getQueryVariable('avatar');
-
-            $("#b").html(login);
-            $("#imgId").attr('src',avatar);
+            $.ajax({
+                url: '/SysUserController/getSysUserInfoById',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    userId: userId
+                },
+                success: function (msg) {
+                    var code = msg.code;
+                    if (code === 200) {
+                        $("#b").html(msg.data.login_name);
+                        $("#imgId").attr('src', msg.filePath);
+                    } else {
+                        layer.msg(msg.msg, {icon: 5});
+                    }
+                }
+            });
         });
     });
+
     function getQueryVariable(variable) {
         var query = window.location.search.substring(1);
         var vars = query.split("&");

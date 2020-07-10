@@ -1,11 +1,14 @@
 package com.coffee.kafeisummary.service.impl;
 
 import com.coffee.kafeisummary.dao.SysUserDao;
+import com.coffee.kafeisummary.dao.UploadDao;
+import com.coffee.kafeisummary.pojo.SysFilePojo;
 import com.coffee.kafeisummary.pojo.SysUserPojo;
 import com.coffee.kafeisummary.service.SysUserService;
 import com.coffee.kafeisummary.topic.TopicSender;
 import com.coffee.kafeisummary.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -30,6 +33,12 @@ public class SysUserServiceImpl implements SysUserService {
     private SysUserDao sysUserDao;
     @Autowired
     TopicSender topicSender;
+    @Autowired
+    private UploadDao uploadDao;
+    @Value("${image.tomcat.path}")
+    private String path;
+    @Value("${image.tomcat.httpAddr}")
+    private String httpAddr;
     /**
      * 用户信息列表查询接口实现方法
      *
@@ -155,24 +164,23 @@ public class SysUserServiceImpl implements SysUserService {
                                 substring(myFileName.lastIndexOf(".") + 1);
                         //定义上传路径
                         try {
-                            //获取当前项目名称
-                            String resourceBasePath = DateUtil.getResourceBasePath();
-                            System.out.println(resourceBasePath);
                             //获取文件保存路径
-                            String avatarPath = "\\src\\main\\resources\\static\\avatar\\";
-                            File fileDir = new File(resourceBasePath + avatarPath);
+                            String addr = path+"\\image";
+                            File fileDir = new File(addr);
                             //如果不存在 则创建
                             if (!fileDir.exists()) {
                                 fileDir.mkdirs();
                             }
-                            String path = resourceBasePath + avatarPath + fileName;
+                            String filePath = addr +"\\"+ fileName;
                             //存文件
-                            File localFile = new File(path);
+                            File localFile = new File(filePath);
                             file.transferTo(localFile);
+                            String httpPath = httpAddr+"image/"+fileName;
+                            System.out.println(httpPath);
                             responseMap.put("code", 200);
                             responseMap.put("msg", "上传成功！");
-                            responseMap.put("filePath", "\\static\\avatar\\"+fileName);
-                            responseMap.put("path", path);
+                            responseMap.put("filePath", httpPath);
+                            responseMap.put("path", filePath);
                         } catch (IllegalStateException | IOException e) {
                             // TODO Auto-generated catch block
                             e.printStackTrace();
@@ -211,9 +219,18 @@ public class SysUserServiceImpl implements SysUserService {
         requestMaps.put("userId", userId);
         SysUserPojo sysUserPojo = sysUserDao.getSysUserInfoById(requestMaps);
         if (sysUserPojo != null) {
-            responseMap.put("code", 200);
-            responseMap.put("msg", "成功！");
-            responseMap.put("data", sysUserPojo);
+            requestMaps.put("avatar","".equals(sysUserPojo.getAvatar())?"upload":sysUserPojo.getAvatar());
+            List<SysFilePojo> sysFilePojoList = uploadDao.selectSysFileInfo(requestMaps);
+            if(sysFilePojoList.size()<1){
+                responseMap.put("code", 201);
+                responseMap.put("msg", "失败！");
+            } else {
+                SysFilePojo sysFilePojo = sysFilePojoList.get(0);
+                responseMap.put("code", 200);
+                responseMap.put("msg", "成功！");
+                responseMap.put("data", sysUserPojo);
+                responseMap.put("filePath", sysFilePojo.getFile_path());
+            }
         } else {
             responseMap.put("code", 201);
             responseMap.put("msg", "失败！");
